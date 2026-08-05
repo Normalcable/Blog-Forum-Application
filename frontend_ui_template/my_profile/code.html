@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile - Discourse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-fixed": "#e4e2dd",
+                "surface-dim": "#dbdad9",
+                "on-tertiary-container": "#848480",
+                "inverse-surface": "#303031",
+                "tertiary-fixed-dim": "#c8c6c2",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f8",
+                "primary": "#000000",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-tint": "#5f5e5e",
+                "on-tertiary-fixed": "#1b1c19",
+                "on-surface": "#1b1c1c",
+                "secondary-fixed-dim": "#e9c176",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "outline": "#747878",
+                "on-primary-container": "#858383",
+                "on-primary-fixed-variant": "#474646",
+                "primary-container": "#1c1b1b",
+                "on-secondary-container": "#785a1a",
+                "on-primary": "#ffffff",
+                "secondary-container": "#fed488",
+                "surface": "#fbf9f8",
+                "surface-bright": "#fbf9f8",
+                "on-tertiary-fixed-variant": "#474744",
+                "secondary": "#775a19",
+                "on-secondary-fixed-variant": "#5d4201",
+                "surface-container-low": "#f5f3f3",
+                "tertiary": "#000000",
+                "tertiary-container": "#1b1c19",
+                "on-background": "#1b1c1c",
+                "on-primary-fixed": "#1c1b1b",
+                "secondary-fixed": "#ffdea5",
+                "surface-container-highest": "#e4e2e2",
+                "outline-variant": "#c4c7c7",
+                "surface-container": "#efeded",
+                "primary-fixed": "#e5e2e1",
+                "on-secondary-fixed": "#261900",
+                "primary-fixed-dim": "#c8c6c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#c8c6c5",
+                "surface-container-high": "#e9e8e7",
+                "on-surface-variant": "#444748",
+                "inverse-on-surface": "#f2f0f0",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max": "1200px",
+                "unit": "8px",
+                "margin-mobile": "20px",
+                "gutter": "32px",
+                "stack-lg": "48px",
+                "stack-sm": "12px",
+                "margin-desktop": "64px",
+                "stack-md": "24px",
+                "lg": "24px",
+                "xs": "4px",
+                "sm": "8px",
+                "base": "4px",
+                "md": "16px",
+                "xl": "32px",
+                "container-padding": "20px"
+        },
+        "fontFamily": {
+                "title-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Libre Caslon Text"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #F8FAFC; /* Fallback */
+            background-color: theme('colors.background');
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row relative">
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden w-full sticky top-0 z-50 bg-surface-container-lowest shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center px-gutter py-md w-full">
+<button aria-label="Menu" class="text-primary hover:bg-surface-variant/50 transition-colors rounded-full p-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Discourse</h1>
+<button aria-label="User profile avatar" class="hover:bg-surface-variant/50 transition-colors rounded-full overflow-hidden w-8 h-8 active:scale-95 transition-transform">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A small, circular portrait of a young professional in a light-mode UI context. The subject has a warm, approachable smile. The lighting is soft and natural, casting subtle shadows that define the facial features. The background is a clean, neutral white, ensuring the subject stands out clearly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOZaCzVtIonyc_cXrGeXUsJvrGLv0bqb0XDWJnnl4oYUleMbahr3h_LYGcwsXZvcing5W58Wbp_yESZuLIwWj9WLRLkNbJ6e9MMsD1iYCCCL0TseGfktjui8sUNKktPd3GcbeBEMsYUFVoahAR4NLQibaJjwxbjvHvVz9J2MG1nCeTaqSMb9Qubwnq-EVRrmDKB9p_pdttM2gENb7yD3WJ14vWxibc_FtnUtZ17IbrR32McGiE-mPs"/>
+</button>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden md:flex h-full w-72 rounded-r-xl bg-surface shadow-xl flex-col p-md fixed z-40 top-0 left-0">
+<div class="mb-xl flex items-center justify-between">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Discourse</h1>
+</div>
+<nav class="flex-1 space-y-2 flex flex-col gap-sm">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-body-md text-body-md">Trending</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="font-body-md text-body-md">Saved</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md text-body-md">Communities</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 pt-md">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="A small, circular portrait of a young professional in a light-mode UI context. The subject has a warm, approachable smile. The lighting is soft and natural, casting subtle shadows that define the facial features. The background is a clean, neutral white, ensuring the subject stands out clearly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7nzkrVLDCEv8t9T2WFwH_BNH4H9FzBvrDUf3ysQQMCCdABnhUQir7h1iA2rpUKKH1yGIfV5Ej5l62HgIO7ZyZ9whiK57bE76KC4hyXhHvCoupYTtb2WfUh55oYGrGk-pPHIWOc8XPVwn3pNMS90LezQ4_H7g6_r-tp7FkX0yDMvhILGL5gK8_AZhAI6NpaL1GBPLtHzCEIR682LzLcBTL-U4d84hDjz9we1VvBEaQa_bZ6dn9_vGF"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Alexander Wright</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">@alex_wright</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-72 pb-24 md:pb-8 w-full max-w-2xl mx-auto flex flex-col items-center justify-start min-h-screen pt-xl px-container-padding">
+<!-- Profile Header & Avatar -->
+<div class="flex flex-col items-center w-full mb-xl">
+<div class="relative group cursor-pointer mb-md">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-[0.75rem] overflow-hidden border-4 border-surface shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] relative z-10">
+<img alt="Large User Avatar" class="w-full h-full object-cover" data-alt="A close-up, high-quality portrait of a person suitable for a professional yet approachable forum profile. The subject is looking directly at the camera with a subtle, confident expression. The lighting is studio-quality, creating a soft, even glow across the face. The background is slightly out of focus, featuring warm, neutral tones that complement the minimalist, light-mode UI design. The overall mood is calm and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL06-dJtsDatH5Z_pWr3CW2I81vZ8wxIgJfSOKKS0YXPbpbmoyNV2AoNlTTEQvZie6Z2WjXIEOS_QItsMznOEL7HUOrpZpB3SfoTvEwThXjE1h3ODpUmOG2U157rOv0c4YHjfPLvUokLjhe8jWXrt9Dm02UwzB1DOBQ8Ume2FZQv9x6h5jpr1Sg-VnP1S-avAUZabrWevU45i1LTRoiVE1xp0IJMMFnG1a1GmC3juU2Yz6zK6gzTZX"/>
+</div>
+<!-- Camera Overlay -->
+<div class="absolute inset-0 bg-surface-variant/50 rounded-[0.75rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-20 backdrop-blur-sm">
+<span class="material-symbols-outlined text-on-surface font-display-lg text-display-lg" data-icon="photo_camera" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</div>
+<!-- Notification/Status Dot (Optional decorative touch) -->
+<div class="absolute bottom-2 right-2 w-4 h-4 bg-secondary rounded-full border-2 border-surface z-30"></div>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface text-center mb-xs">Edit Profile</h2>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mb-lg max-w-sm">Manage your public persona and account settings.</p>
+</div>
+<!-- Form Area (Card) -->
+<div class="w-full bg-surface-container-lowest rounded-[0.75rem] p-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-outline-variant/20 mb-xl flex flex-col gap-md">
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="displayName">Display Name</label>
+<input class="w-full bg-surface-container-low text-on-surface font-body-md text-body-md px-md py-sm rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-colors h-12" id="displayName" type="text" value="Alexander Wright"/>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="username">Username (Handle)</label>
+<div class="relative flex items-center">
+<span class="absolute left-md font-body-md text-body-md text-on-surface-variant pointer-events-none">@</span>
+<input class="w-full bg-surface-container-low text-on-surface font-body-md text-body-md pl-10 pr-md py-sm rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-colors h-12" id="username" type="text" value="alex_wright"/>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1" for="bio">Short Bio</label>
+<textarea class="w-full bg-surface-container-low text-on-surface font-body-md text-body-md px-md py-sm rounded-lg border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-colors resize-none" id="bio" rows="3">Digital philosopher exploring the intersection of technology and human connection. Avid reader, occasional writer.</textarea>
+</div>
+<div class="mt-md">
+<button class="w-full bg-primary hover:bg-primary/90 text-on-primary font-label-md text-label-md py-3 rounded-[0.75rem] shadow-sm hover:shadow-md transition-all active:scale-[0.98]">
+                    Save Changes
+                </button>
+</div>
+</div>
+<!-- Danger Zone / Secondary Actions -->
+<div class="w-full flex flex-col gap-md">
+<button class="w-full bg-surface-container-high hover:bg-surface-variant text-error font-label-md text-label-md py-3 rounded-[0.75rem] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] transition-all active:scale-[0.98] flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Log Out
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<!-- Applying Active Logic: Profile is active -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 backdrop-blur-md bg-surface/70 border-t border-outline-variant/30 flex justify-around items-center py-sm pb-safe px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 transition-opacity active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="forum">forum</span>
+<span class="font-label-sm text-label-sm">Activity</span>
+</a>
+<!-- Active Tab: Profile -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container bg-secondary-container rounded-[0.75rem] px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple script to handle safe area bottom padding for iOS
+        if (CSS.supports('padding-bottom: env(safe-area-inset-bottom)')) {
+            const bottomNav = document.querySelector('.pb-safe');
+            if (bottomNav) {
+                bottomNav.style.paddingBottom = 'calc(var(--spacing-sm) + env(safe-area-inset-bottom))';
+            }
+        }
+    </script>
+</body></html>

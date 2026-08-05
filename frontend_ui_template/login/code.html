@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Discourse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-fixed": "#e4e2dd",
+                "surface-dim": "#dbdad9",
+                "on-tertiary-container": "#848480",
+                "inverse-surface": "#303031",
+                "tertiary-fixed-dim": "#c8c6c2",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f8",
+                "primary": "#000000",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-tint": "#5f5e5e",
+                "on-tertiary-fixed": "#1b1c19",
+                "on-surface": "#1b1c1c",
+                "secondary-fixed-dim": "#e9c176",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "outline": "#747878",
+                "on-primary-container": "#858383",
+                "on-primary-fixed-variant": "#474646",
+                "primary-container": "#1c1b1b",
+                "on-secondary-container": "#785a1a",
+                "on-primary": "#ffffff",
+                "secondary-container": "#fed488",
+                "surface": "#fbf9f8",
+                "surface-bright": "#fbf9f8",
+                "on-tertiary-fixed-variant": "#474744",
+                "secondary": "#775a19",
+                "on-secondary-fixed-variant": "#5d4201",
+                "surface-container-low": "#f5f3f3",
+                "tertiary": "#000000",
+                "tertiary-container": "#1b1c19",
+                "on-background": "#1b1c1c",
+                "on-primary-fixed": "#1c1b1b",
+                "secondary-fixed": "#ffdea5",
+                "surface-container-highest": "#e4e2e2",
+                "outline-variant": "#c4c7c7",
+                "surface-container": "#efeded",
+                "primary-fixed": "#e5e2e1",
+                "on-secondary-fixed": "#261900",
+                "primary-fixed-dim": "#c8c6c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#c8c6c5",
+                "surface-container-high": "#e9e8e7",
+                "on-surface-variant": "#444748",
+                "inverse-on-surface": "#f2f0f0",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max": "1200px",
+                "unit": "8px",
+                "margin-mobile": "20px",
+                "gutter": "32px",
+                "stack-lg": "48px",
+                "stack-sm": "12px",
+                "margin-desktop": "64px",
+                "stack-md": "24px"
+        },
+        "fontFamily": {
+                "title-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Libre Caslon Text"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background h-full flex items-center justify-center font-body-md text-on-background antialiased selection:bg-secondary-container selection:text-on-secondary-container p-gutter">
+<!-- Login Card Canvas -->
+<main class="w-full max-w-md bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-surface-variant overflow-hidden p-stack-md md:p-gutter flex flex-col gap-gutter">
+<!-- Header -->
+<header class="flex flex-col gap-stack-sm items-center text-center">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary">Discourse</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back. Join the conversation.</p>
+</header>
+<!-- Form -->
+<form action="#" class="flex flex-col gap-stack-md" method="POST">
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-md text-label-md text-on-surface" for="email">Email Address</label>
+<div class="relative flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined absolute left-stack-sm text-on-surface-variant pointer-events-none" data-icon="mail">mail</span>
+<input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant rounded-lg border-none py-[14px] pl-[48px] pr-stack-sm font-body-md text-body-md focus:ring-2 focus:ring-secondary focus:bg-surface-container-lowest transition-colors shadow-sm" id="email" name="email" placeholder="name@example.com" required="" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
+<a class="font-label-sm text-label-sm text-secondary hover:text-secondary-container transition-colors" href="#">Forgot password?</a>
+</div>
+<div class="relative flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined absolute left-stack-sm text-on-surface-variant pointer-events-none" data-icon="lock">lock</span>
+<input class="w-full bg-surface-container-low text-on-surface placeholder:text-on-surface-variant rounded-lg border-none py-[14px] pl-[48px] pr-stack-sm font-body-md text-body-md focus:ring-2 focus:ring-secondary focus:bg-surface-container-lowest transition-colors shadow-sm" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md rounded-full py-[14px] px-stack-md shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] active:scale-[0.98] transition-all flex justify-center items-center gap-stack-sm" type="submit">
+                Log In
+                <span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Footer / Secondary Action -->
+<footer class="text-center pt-stack-sm border-t border-surface-variant/50">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Don't have an account? 
+                <a class="text-secondary font-label-md text-label-md hover:underline underline-offset-4 decoration-secondary/50 transition-all" href="#">Register</a>
+</p>
+</footer>
+</main>
+<script>
+        // Micro-interaction for inputs to add a subtle hover effect if desired, mostly handled by Tailwind focus states.
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('.material-symbols-outlined').classList.replace('text-on-surface-variant', 'text-secondary');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.querySelector('.material-symbols-outlined').classList.replace('text-secondary', 'text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

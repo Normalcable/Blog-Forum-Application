@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Blog Forum - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-fixed": "#e4e2dd",
+                "surface-dim": "#dbdad9",
+                "on-tertiary-container": "#848480",
+                "inverse-surface": "#303031",
+                "tertiary-fixed-dim": "#c8c6c2",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f8",
+                "primary": "#000000",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-tint": "#5f5e5e",
+                "on-tertiary-fixed": "#1b1c19",
+                "on-surface": "#1b1c1c",
+                "secondary-fixed-dim": "#e9c176",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "outline": "#747878",
+                "on-primary-container": "#858383",
+                "on-primary-fixed-variant": "#474646",
+                "primary-container": "#1c1b1b",
+                "on-secondary-container": "#785a1a",
+                "on-primary": "#ffffff",
+                "secondary-container": "#fed488",
+                "surface": "#fbf9f8",
+                "surface-bright": "#fbf9f8",
+                "on-tertiary-fixed-variant": "#474744",
+                "secondary": "#775a19",
+                "on-secondary-fixed-variant": "#5d4201",
+                "surface-container-low": "#f5f3f3",
+                "tertiary": "#000000",
+                "tertiary-container": "#1b1c19",
+                "on-background": "#1b1c1c",
+                "on-primary-fixed": "#1c1b1b",
+                "secondary-fixed": "#ffdea5",
+                "surface-container-highest": "#e4e2e2",
+                "outline-variant": "#c4c7c7",
+                "surface-container": "#efeded",
+                "primary-fixed": "#e5e2e1",
+                "on-secondary-fixed": "#261900",
+                "primary-fixed-dim": "#c8c6c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#c8c6c5",
+                "surface-container-high": "#e9e8e7",
+                "on-surface-variant": "#444748",
+                "inverse-on-surface": "#f2f0f0",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max": "1200px",
+                "unit": "8px",
+                "margin-mobile": "20px",
+                "gutter": "32px",
+                "stack-lg": "48px",
+                "stack-sm": "12px",
+                "margin-desktop": "64px",
+                "stack-md": "24px"
+        },
+        "fontFamily": {
+                "title-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Libre Caslon Text"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .glass-nav {
+            background: rgba(251, 249, 248, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-surface-container-lowest shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center px-gutter py-stack-md w-full max-w-3xl mx-auto">
+<button aria-label="Menu" class="text-on-surface-variant hover:bg-surface-variant/50 transition-colors rounded-full p-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Blog Forum</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-lowest shadow-sm cursor-pointer hover:opacity-80 transition-opacity">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a person with a warm, approachable smile, shot against a bright, modern white background with soft, diffused lighting. The image should have a professional yet relaxed aesthetic typical of a modern intellectual forum profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy4RMdppdKYRwHOs4IE9Vd9-v9iFgf4Tl3r3K1kIR0edqD5yI01us6es_1kQRPzv2VgsVKVYyt7KGx88bQoDoAhWHBm7tPKmMLkpk5bXYwzZTEqjgciyVwRn5aRx5N95A3LwA7tWhwEThsEM7N5Vd3NPNzws3UJ6Tr_Tl6aLwhKiVa-Bjt9keIq0V2Xov7ztRfUzyM60ub-otYhHDGtraTeESazkh1tVmEltzL8FO4Er3Ncw0btt6W"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-margin-mobile py-stack-lg pb-32">
+<div class="space-y-stack-md">
+<!-- Post Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl p-stack-md shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col gap-stack-sm">
+<div class="w-full h-48 md:h-64 rounded-lg overflow-hidden mb-stack-sm relative">
+<img class="w-full h-full object-cover absolute inset-0" data-alt="A serene, minimalist workspace featuring a sleek wooden desk, an open notebook with fine lined paper, and a modern ceramic coffee cup. Soft morning sunlight streams across the desk, creating a warm, focused, and intellectual atmosphere suited for deep reading and writing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpi1-uBX6p5X0LABW1eAIulkyMQAHmDk0iDyvi4E7HcjhK9HoXvwy8xDH0Q-G4rWe7uCjcW32SAdAOpz5P5Raibjdh_yh0B1Lx7TnriMFCAin81qnKaXeIig7TOLQo9_xG04esLeujroH1iIBnJudsKMvNSp9XQGYqy5QQQEr07nJAtq2QIBnGMboHRYTJy_i_17J5_nDcULOHmzbVQKiofszDYNxJt6mFjQRhrwJCQ12qXl8AO4vP"/>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant font-label-sm text-label-sm">
+<span class="bg-surface-container-low px-2 py-1 rounded-full text-secondary">#Design</span>
+<span class="bg-surface-container-low px-2 py-1 rounded-full text-secondary">#Minimalism</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mt-stack-sm">The Art of Subtraction in UI</h2>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">In a world cluttered with information, designing interfaces that prioritize clarity and focus is more critical than ever. We explore how removing elements can actually enhance the user experience.</p>
+<div class="flex justify-between items-center mt-stack-md pt-stack-sm border-t border-outline-variant/30">
+<div class="flex items-center gap-stack-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A tiny avatar of a writer wearing glasses, looking thoughtfully off-camera. Soft, neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQRDm3_0jSnWPsbpHEyIeun6wxsPP0DxeFzdGYfS9bfn0juujrgk95yJce9EnmGuxLyTKrYcQldF0yVWi0bCYMF56MOjUBK1oUzzVgBlYfoeJQqKw--nsBd9JtxM3rsxwRZ2Yb8DdA4T8tZ3EMX83612Af3S9faYJo22gwuoQA84DZCXc09wGSh4B639u-f--Xi-MPDYaJIi0gtdLKivuDdWrH3mKe_vZp2RuITqSdn_Ki779rAWpd"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Elena Rostova</span>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant hover:text-secondary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">42</span>
+</div>
+</div>
+</article>
+<!-- Post Card 2 -->
+<article class="bg-surface-container-lowest rounded-xl p-stack-md shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col gap-stack-sm">
+<div class="w-full h-48 md:h-64 rounded-lg overflow-hidden mb-stack-sm relative">
+<img class="w-full h-full object-cover absolute inset-0" data-alt="A macro shot of a complex circuit board illuminated by soft, ambient blue and indigo light, suggesting deep technology and architectural structure. The aesthetic is clean, high-tech, and modern, representing software architecture and deep technical discussion." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVjCpxEgea3U4tJpqkxz1VOy5zSn4qHi8OaM_SxLjFGT9VpjsoS8vdzL1_NO2_kB3NlNzNXtr1uXVwS9EKMuyBZ6ktrAek_oHssgspH1qUG3mTGOMzeKO1wTIa6f1qMRhj7SsxkFwTIAQhUQQZ1RG71rx_HSakDVOVMIReyr4QBl3ag6Xp98VRiDRQkDdjqS_5k-UHQUHJuC37W5-k9r84wpyEG2DcTx4BRrJEqNzeOFtd96WPqAs7"/>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant font-label-sm text-label-sm">
+<span class="bg-surface-container-low px-2 py-1 rounded-full text-secondary">#Architecture</span>
+<span class="bg-surface-container-low px-2 py-1 rounded-full text-secondary">#Tech</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mt-stack-sm">Building Resilient Systems</h2>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3">Examining the principles of modern system architecture and how we can design services that withstand unexpected failures gracefully.</p>
+<div class="flex justify-between items-center mt-stack-md pt-stack-sm border-t border-outline-variant/30">
+<div class="flex items-center gap-stack-sm">
+<div class="w-6 h-6 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small avatar of a smiling man with a neat beard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB_CR_QDX4A1QKg9Qs6bA2-I9xTWqcW7VRcdBpxWb2n2G9GyJDPBSsfXkdiffXRIt0us-0FGVGmgBbbv2sTc7jkf4vKsvmpGJzAYE7lA8xQMtaNGDmkNHMGbrrFiQX1eBVOXGLt4uR0ZkFaNYwkM3xti6JQ4ciXJQBJdysM9OmYwMI_QgjB0c8_gi83PagfEM37gIwMrWrPEqKuyYh84HPDyUy0VGaraGBDUgUoMzeEmbp8iErhA6u"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">David Chen</span>
+</div>
+<div class="flex items-center gap-unit text-on-surface-variant hover:text-secondary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span class="font-label-sm text-label-sm">18</span>
+</div>
+</div>
+</article>
+<!-- Load More Button -->
+<div class="flex justify-center pt-stack-md">
+<button class="bg-surface-container-high text-on-surface font-label-md text-label-md px-gutter py-stack-sm rounded-full hover:bg-surface-variant transition-colors border border-outline-variant/50">
+                    Load More
+                </button>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 md:right-12 md:bottom-12 w-14 h-14 bg-primary text-on-primary rounded-full shadow-[0_10px_15px_-3px_rgba(0,0,0,0.2)] flex items-center justify-center hover:bg-primary/90 active:scale-90 transition-all z-40 border border-surface-container-lowest/20">
+<span class="material-symbols-outlined" style="font-size: 28px;">add</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden glass-nav fixed bottom-0 w-full flex justify-around items-center py-stack-sm pb-safe px-gutter z-50 border-t border-outline-variant/20">
+<a class="flex flex-col items-center justify-center text-on-surface bg-secondary-container/40 rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-1 text-secondary">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-sm text-label-sm mt-1">Activity</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:opacity-100 hover:text-primary transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

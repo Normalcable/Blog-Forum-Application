@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-fixed": "#e4e2dd",
+                "surface-dim": "#dbdad9",
+                "on-tertiary-container": "#848480",
+                "inverse-surface": "#303031",
+                "tertiary-fixed-dim": "#c8c6c2",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f8",
+                "primary": "#000000",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-tint": "#5f5e5e",
+                "on-tertiary-fixed": "#1b1c19",
+                "on-surface": "#1b1c1c",
+                "secondary-fixed-dim": "#e9c176",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "outline": "#747878",
+                "on-primary-container": "#858383",
+                "on-primary-fixed-variant": "#474646",
+                "primary-container": "#1c1b1b",
+                "on-secondary-container": "#785a1a",
+                "on-primary": "#ffffff",
+                "secondary-container": "#fed488",
+                "surface": "#fbf9f8",
+                "surface-bright": "#fbf9f8",
+                "on-tertiary-fixed-variant": "#474744",
+                "secondary": "#775a19",
+                "on-secondary-fixed-variant": "#5d4201",
+                "surface-container-low": "#f5f3f3",
+                "tertiary": "#000000",
+                "tertiary-container": "#1b1c19",
+                "on-background": "#1b1c1c",
+                "on-primary-fixed": "#1c1b1b",
+                "secondary-fixed": "#ffdea5",
+                "surface-container-highest": "#e4e2e2",
+                "outline-variant": "#c4c7c7",
+                "surface-container": "#efeded",
+                "primary-fixed": "#e5e2e1",
+                "on-secondary-fixed": "#261900",
+                "primary-fixed-dim": "#c8c6c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#c8c6c5",
+                "surface-container-high": "#e9e8e7",
+                "on-surface-variant": "#444748",
+                "inverse-on-surface": "#f2f0f0",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max": "1200px",
+                "unit": "8px",
+                "margin-mobile": "20px",
+                "gutter": "32px",
+                "stack-lg": "48px",
+                "stack-sm": "12px",
+                "margin-desktop": "64px",
+                "stack-md": "24px"
+        },
+        "fontFamily": {
+                "title-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Libre Caslon Text"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+          .material-symbols-outlined {
+              font-family: 'Material Symbols Outlined';
+              font-weight: normal;
+              font-style: normal;
+              font-size: 24px;
+              line-height: 1;
+              letter-spacing: normal;
+              text-transform: none;
+              display: inline-block;
+              white-space: nowrap;
+              word-wrap: normal;
+              direction: ltr;
+              font-feature-settings: 'liga';
+              -webkit-font-feature-settings: 'liga';
+              -webkit-font-smoothing: antialiased;
+          }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-[120px]">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-50 bg-surface-container-lowest shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center px-gutter py-stack-md w-full max-w-container-max mx-auto">
+<button class="text-on-surface-variant hover:bg-surface-variant/50 transition-colors p-2 rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Discourse</h1>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A detailed portrait of a user avatar with warm, inviting lighting. The subject is a young professional looking directly at the camera with a subtle smile. The background is a soft, blurred studio setting. The overall mood is approachable and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx1VFonIA0B8clzR_9Pw4MimIu6_t3D0KqrEwfdegxQqO_AP4eMNsQQFi_0HdeeDz-lVuOCIlHDUggDXVKz4lBbU17axBd5NYUhOh-wvLX3VuqJ3iAf_AAivcPXaIXooNMSIagodW9ZN9Sy2ygKNMfLPyEsYKQoHZ8SezysxQ1yVp2kTMUVbUxSEofRQcodfVU6G8Emq5dtFDNu26fKarf31kAvOqSXbqYxgLfuUxXwalTXP6P-nep"/>
+</div>
+</div>
+</header>
+<main class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg mt-stack-md">
+<!-- Post Header & Metadata -->
+<article class="bg-surface-container-lowest rounded-xl p-stack-md md:p-stack-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-surface-variant/50">
+<div class="flex items-center justify-between mb-stack-md">
+<div class="flex items-center space-x-stack-sm">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/30" data-alt="A small circular avatar image of the post author, a creative professional in their 30s. Soft natural lighting highlights their features against a plain, light grey background. The image feels clean and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMoRafcA_GEGzR5xGzFpC3JVGYJfNXJr90SIcmn0LoL4vT6uHcVRyhpuM3pHguMgy2_QcmneiFTTdTbWvV0rxsVzy8xphC0tJTZbeYl_4FIHN_tXAa9tWlSeBHkiw73E-k9CJtegouROaObgEO0unHuGtsminDctXRSzUWLuPqGtldst3tvXu67ro_Ofxn637ut2bolLj726Eb7jCf2Lq_d6KmEQvHEek0yB_Q1w-fs78sTOiiHe43"/>
+<div>
+<div class="font-label-md text-label-md text-on-surface">Sarah Jenkins</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</div>
+</div>
+</div>
+<div class="flex space-x-unit">
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-error hover:bg-error-container/50 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-stack-md">The Architecture of Silence: Designing for Focus</h1>
+<!-- Image Carousel (Simplified for HTML) -->
+<div class="mb-stack-lg relative rounded-xl overflow-hidden group">
+<img class="w-full h-[300px] md:h-[450px] object-cover" data-alt="A beautifully composed photograph of a minimalist architectural space. Vast white concrete walls interact with harsh, angular shadows cast by unseen windows. A single, thin line of indigo light cuts across the floor. The aesthetic is serene, stark, and highly intellectual, focusing on negative space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAepaAoXvCWioQGn75QJDeBBBPbMAOaOmwd_pGMbv9gqAfkyQNTJGmYnIDnp8tJ7HO7nQ0a3PaK6iXWB8EFNyOomNp425SysRGIOWXssqv1lwkKjC_gSsIs9WoPS4L3xHLTeMJ5Zpx1rfhf-tEUlMY5LSwW8HUqQ4_eOS5h0eL7Qcr3cUsHGEj3zz3z2LQV0_NRoR0xMKyMLC014_hZWg0G91bZBvHO-DybPh1iOKyF7ztoz681c-sX"/>
+<!-- Carousel Controls -->
+<button class="absolute left-stack-sm top-1/2 -translate-y-1/2 bg-surface/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-sm">
+<span class="material-symbols-outlined text-on-surface" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="absolute right-stack-sm top-1/2 -translate-y-1/2 bg-surface/80 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-sm">
+<span class="material-symbols-outlined text-on-surface" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Indicators -->
+<div class="absolute bottom-stack-sm left-1/2 -translate-x-1/2 flex space-x-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant/80 backdrop-blur-sm"></div>
+<div class="w-2 h-2 rounded-full bg-surface-variant/80 backdrop-blur-sm"></div>
+</div>
+</div>
+<!-- Post Content -->
+<div class="font-body-md text-body-md text-on-surface space-y-stack-md">
+<p>In an era defined by constant notification pings and algorithmic urgency, creating digital spaces that foster deep focus has become a radical act. We often talk about 'user engagement,' but rarely do we discuss 'user tranquility.'</p>
+<p>Consider the physical library. The architecture itself enforces a behavioral shift. High ceilings dampen sound, specific lighting arrangements delineate reading zones from stacks, and the overall volume of space demands a physical quietness. Can we replicate this in our interfaces?</p>
+<p>By leveraging generous whitespace (what I prefer to call 'breathing room') and heavily restricting our color palettes, we can guide the user's eye without shouting at them. It's about designing islands of information rather than a sea of data.</p>
+</div>
+<!-- Tags -->
+<div class="mt-stack-lg flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-low text-tertiary-container font-label-sm text-label-sm rounded-[8px]">#DesignTheory</span>
+<span class="px-3 py-1 bg-surface-container-low text-tertiary-container font-label-sm text-label-sm rounded-[8px]">#UX</span>
+<span class="px-3 py-1 bg-surface-container-low text-tertiary-container font-label-sm text-label-sm rounded-[8px]">#Minimalism</span>
+</div>
+</article>
+<!-- Comments Section -->
+<section class="mt-stack-lg">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md">Responses (3)</h2>
+<div class="space-y-stack-lg">
+<!-- Comment 1 -->
+<div class="flex space-x-stack-md">
+<img class="w-10 h-10 rounded-full object-cover shrink-0 mt-1 border border-outline-variant/30" data-alt="A small circular avatar of a user. The lighting is slightly cooler, suggesting an indoor office environment. The person is wearing glasses and looking thoughtfully slightly off-camera. The background is a solid, soft grey." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqSuYCFU_tO-bEzGanacvyRW1yvQR1t4atP96Z88Q5SPqmPuCWYF-tmtqNoSa3qXQbKF4iqmZjUUhbndJCTh5uf6opXcNd-aU2WOdKhwzqTzHSIx1NKPrlLlsOmMHcN7DeEBy2HVfH_rEaHYmKm5ZSZQ5bU1d7Tv6E2RumOvYcD9yUuRrirQEX62YcSrO60VUnxHz4j8Cw8UeydH9Isb0pUn6Skvz7qJ7rVKvBZcXcyk7xglL2GtNX"/>
+<div class="bg-surface-container-lowest rounded-xl p-stack-md shadow-sm flex-1 border border-surface-variant/30 relative">
+<div class="absolute left-[-24px] top-[40px] bottom-[-24px] w-[2px] bg-secondary/20 rounded-full hidden md:block"></div>
+<div class="flex justify-between items-start mb-stack-sm">
+<div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">David Chen</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-2">1 hr ago</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Brilliant take on the library analogy. I think the challenge is convincing stakeholders that 'quiet' interfaces don't mean 'dead' interfaces. Engagement metrics often punish subtlety.</p>
+<div class="mt-stack-sm flex items-center space-x-4">
+<button class="flex items-center text-on-surface-variant hover:text-secondary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px] mr-1" data-icon="favorite">favorite</span> 12
+                            </button>
+<button class="flex items-center text-on-surface-variant hover:text-secondary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px] mr-1" data-icon="reply">reply</span> Reply
+                            </button>
+</div>
+</div>
+</div>
+<!-- Comment 2 (Nested) -->
+<div class="flex space-x-stack-md ml-stack-lg relative">
+<div class="absolute left-[-16px] top-[20px] w-[12px] h-[2px] bg-secondary/20 hidden md:block"></div>
+<img class="w-10 h-10 rounded-full object-cover shrink-0 mt-1 border border-outline-variant/30" data-alt="A small circular avatar image. The person is smiling brightly, illuminated by warm sunlight. The background suggests an outdoor urban setting, slightly out of focus. The image conveys energy and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfhbRkx5RQfF9BdiYyap2s93zh4O1gckIaBn3Hmqi3blqoCu_d0cFQtQzeUDUHVTDYnOSnWHszC_yeH5CPd700O1-rwrVLrlFVIuCxnOyJlpN6ZoyZ7lJU_vMAo_yJO7T53TszNnBQtSgOL7mwzysgqlyK2NkbeKy3GVm53M_Fp5dps78RDtpFrMt5T1_1ITFroAneqU4NmUGBn_PSCDkO3RcZ5pD3VYtxImNhwyB4E9-eNSmO7uKR"/>
+<div class="bg-surface-container-lowest rounded-xl p-stack-md shadow-sm flex-1 border border-surface-variant/30">
+<div class="flex justify-between items-start mb-stack-sm">
+<div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Elena Rostova</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-2">45 mins ago</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Exactly this! We need better metrics for 'quality of time spent' rather than just 'duration'.</p>
+</div>
+</div>
+<!-- Comment 3 with Image -->
+<div class="flex space-x-stack-md">
+<img class="w-10 h-10 rounded-full object-cover shrink-0 mt-1 border border-outline-variant/30" data-alt="A small circular avatar of a user with a more artistic vibe. They are wearing a beanie and the lighting is dramatic with strong shadows, creating a moody but modern feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdze5BgkqzKhgMnANSUe0yvvKVpnPLupn4rQucIq95ILP5p-JjBzDslhDPMK_jQSl-mVgkDktaGjArFhAoUmvp2PzBo-s9SE4HMXw6G0NQ0y5D0EhpyevFSENzz6wkYnzjvmKOfWG8JMo0ZvLLVa3dev7wENfdQDLskJo6yeqsAFYtq6UD_W8n302MLM3ka5jJVs1NfSnBXMJKq2uVd-dDcodCUYw9h8zT9mNBk89BLE8unSwl-miG"/>
+<div class="bg-surface-container-lowest rounded-xl p-stack-md shadow-sm flex-1 border border-surface-variant/30">
+<div class="flex justify-between items-start mb-stack-sm">
+<div>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Markus Thorne</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant ml-2">10 mins ago</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-stack-sm">I've been experimenting with this in my latest project. Notice how the stark contrast creates focus areas without needing heavy borders or bold colors.</p>
+<img class="w-full max-w-[400px] h-auto rounded-lg mb-stack-sm border border-surface-variant" data-alt="A screenshot of a minimalist digital interface. It features a stark white background with thin, elegant sans-serif typography. There are no clear borders, only subtle shifts in grey tones to separate content. A single indigo button provides the only splash of color. The design feels extremely clean, professional, and slightly austere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc_jPGs678Ik89dVsYF6DNnOeViX8mtz0vX7MLdoC831BqDRtzjF-0sxj5Dmz821u48tUFMcuAIcvAEYD8ghS64x6Uv30GAwMP3_q_76jrJWo_21YHPkJjQPNBTv-lFJy0NT-9zCuXkgpRATMV6tuqhl6TKbEHeGrQlefc_XeBaMjrxcJrE-ium7B1dqVqbL2ZCMYyDffRi9fuwjnG2wqrOkznQnb8HhNqZt8HOuk01F5-YZ7htzdL"/>
+<div class="mt-stack-sm flex items-center space-x-4">
+<button class="flex items-center text-on-surface-variant hover:text-secondary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px] mr-1" data-icon="favorite">favorite</span> 3
+                            </button>
+<button class="flex items-center text-on-surface-variant hover:text-secondary transition-colors text-sm">
+<span class="material-symbols-outlined text-[18px] mr-1" data-icon="reply">reply</span> Reply
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Comment Input -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-md border-t border-outline-variant/30 p-stack-sm px-margin-mobile md:px-margin-desktop z-40 pb-safe pb-stack-lg md:pb-stack-sm">
+<div class="max-w-3xl mx-auto flex items-end space-x-stack-sm bg-surface-container-lowest rounded-xl p-stack-sm shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-surface-variant/50 focus-within:border-primary/50 transition-colors">
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 rounded-full transition-colors mb-1 shrink-0">
+<span class="material-symbols-outlined" data-icon="image">image</span>
+</button>
+<textarea class="w-full bg-transparent border-none focus:ring-0 resize-none font-body-md text-body-md text-on-surface py-2 max-h-[120px]" placeholder="Add a response..." rows="1" style="min-height: 40px;"></textarea>
+<button class="px-4 py-2 bg-primary text-on-primary font-label-md rounded-full hover:bg-primary-container transition-colors shrink-0 mb-1">
+                Post
+            </button>
+</div>
+</div>
+</body></html>

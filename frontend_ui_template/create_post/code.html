@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Discourse - New Post</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&amp;family=Libre+Caslon+Text:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "tertiary-fixed": "#e4e2dd",
+                "surface-dim": "#dbdad9",
+                "on-tertiary-container": "#848480",
+                "inverse-surface": "#303031",
+                "tertiary-fixed-dim": "#c8c6c2",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "background": "#fbf9f8",
+                "primary": "#000000",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e4e2e2",
+                "surface-tint": "#5f5e5e",
+                "on-tertiary-fixed": "#1b1c19",
+                "on-surface": "#1b1c1c",
+                "secondary-fixed-dim": "#e9c176",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "outline": "#747878",
+                "on-primary-container": "#858383",
+                "on-primary-fixed-variant": "#474646",
+                "primary-container": "#1c1b1b",
+                "on-secondary-container": "#785a1a",
+                "on-primary": "#ffffff",
+                "secondary-container": "#fed488",
+                "surface": "#fbf9f8",
+                "surface-bright": "#fbf9f8",
+                "on-tertiary-fixed-variant": "#474744",
+                "secondary": "#775a19",
+                "on-secondary-fixed-variant": "#5d4201",
+                "surface-container-low": "#f5f3f3",
+                "tertiary": "#000000",
+                "tertiary-container": "#1b1c19",
+                "on-background": "#1b1c1c",
+                "on-primary-fixed": "#1c1b1b",
+                "secondary-fixed": "#ffdea5",
+                "surface-container-highest": "#e4e2e2",
+                "outline-variant": "#c4c7c7",
+                "surface-container": "#efeded",
+                "primary-fixed": "#e5e2e1",
+                "on-secondary-fixed": "#261900",
+                "primary-fixed-dim": "#c8c6c5",
+                "on-tertiary": "#ffffff",
+                "inverse-primary": "#c8c6c5",
+                "surface-container-high": "#e9e8e7",
+                "on-surface-variant": "#444748",
+                "inverse-on-surface": "#f2f0f0",
+                "on-error": "#ffffff"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-max": "1200px",
+                "unit": "8px",
+                "margin-mobile": "20px",
+                "gutter": "32px",
+                "stack-lg": "48px",
+                "stack-sm": "12px",
+                "margin-desktop": "64px",
+                "stack-md": "24px",
+                "lg": "24px",
+                "xs": "4px",
+                "sm": "8px",
+                "base": "4px",
+                "md": "16px",
+                "xl": "32px",
+                "container-padding": "20px"
+        },
+        "fontFamily": {
+                "title-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Libre Caslon Text"
+                ],
+                "display-lg-mobile": [
+                        "Libre Caslon Text"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "display-lg": [
+                        "Libre Caslon Text"
+                ],
+                "headline-md": [
+                        "Libre Caslon Text"
+                ],
+                "label-sm": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "title-lg": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "letterSpacing": "0.01em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "56px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.08em",
+                                "fontWeight": "500"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+            background-color: #fbf9f8;
+        }
+        h1, h2, h3, .font-headline-sm, .font-headline-md, .font-display-lg, .font-display-lg-mobile {
+            font-family: 'Libre Caslon Text', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row font-body-md text-body-md overflow-x-hidden">
+<!-- Mobile Top App Bar (Only visible on mobile) -->
+<header class="md:hidden w-full sticky top-0 z-50 bg-surface-container-lowest dark:bg-surface-dim shadow-sm flex justify-between items-center px-gutter py-md">
+<button class="text-on-surface-variant hover:bg-surface-variant/50 transition-colors rounded-full p-sm active:scale-95 transition-transform">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-title-lg text-title-lg font-bold text-primary dark:text-inverse-primary">New Post</h1>
+<button class="text-secondary font-label-md text-label-md font-semibold hover:bg-surface-variant/50 transition-colors rounded-full px-sm py-1 active:scale-95 transition-transform">
+            Draft
+        </button>
+</header>
+<!-- Desktop Navigation Drawer (Hidden on mobile) -->
+<nav class="hidden md:flex flex-col h-screen w-72 rounded-r-xl bg-surface dark:bg-surface-dim shadow-xl p-md sticky top-0 flex-shrink-0 z-40">
+<!-- Header -->
+<div class="flex items-center space-x-md mb-xl p-sm">
+<img alt="User avatar" class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-high" data-alt="A clean, minimalist portrait photograph of a young professional in a light, bright setting. The person is looking directly at the camera with a calm expression. The background is a soft, out-of-focus white and grey. The lighting is soft and even, highlighting their features." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmGVYthHhNU8yMf7LMflwnyevxNjK_zbuyuIAkkKzU5vb6niSVq_HgQZcU2U3drbHRmeN8td9BfNY6Bo5lNrdv-JnE7nsfc-aa7SyAzStIiV_XI5kBQ7c72Xd9qQGCxOdAgwVzG3x9HOnpNJbl89Q7cjrfnpNYHlMD0VpaiBb5EUaWYqF0VWqQx8oKewpaPgW_pErWgb8FV5_OQVvhNKs1tHJ8BX_cDY0KIDyTUcmMaM7_oPJTHGnx"/>
+<div class="flex flex-col left_align">
+<span class="font-title-lg text-title-lg text-primary truncate w-full">Alexander Wright</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate w-full">@alex_wright</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col space-y-sm flex-grow">
+<a class="flex items-center space-x-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</a>
+<a class="flex items-center space-x-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-md text-label-md">Trending</span>
+</a>
+<a class="flex items-center space-x-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="font-label-md text-label-md">Saved</span>
+</a>
+<a class="flex items-center space-x-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Communities</span>
+</a>
+<a class="flex items-center space-x-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-surface-container-high transition-colors active:opacity-80" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-start py-xl px-gutter md:px-xl">
+<!-- Editor Canvas (Bento-inspired form) -->
+<div class="w-full max-w-3xl flex flex-col space-y-md">
+<!-- Desktop Header (Hidden on Mobile) -->
+<div class="hidden md:flex justify-between items-center w-full mb-md">
+<h1 class="font-headline-sm text-headline-sm text-on-background">Create Discussion</h1>
+<div class="flex space-x-sm">
+<button class="bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-md py-sm rounded-full hover:bg-surface-variant transition-colors">
+                        Save Draft
+                    </button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-md py-sm rounded-full hover:bg-primary-container transition-colors shadow-md">
+                        Publish
+                    </button>
+</div>
+</div>
+<!-- Main Input Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex flex-col space-y-md">
+<!-- Category/Community Selection -->
+<div class="flex items-center space-x-sm pb-sm border-b border-surface-container-high">
+<span class="material-symbols-outlined text-outline">group</span>
+<select class="bg-transparent border-none focus:ring-0 text-on-surface-variant font-label-md text-label-md w-full cursor-pointer outline-none">
+<option value="general">Select Community...</option>
+<option value="design">Design Systems</option>
+<option value="tech">Tech &amp; Architecture</option>
+<option value="philosophy">Philosophy</option>
+</select>
+</div>
+<!-- Title Input -->
+<input class="w-full bg-transparent border-none focus:ring-0 font-headline-sm md:font-headline-sm text-headline-sm md:text-headline-sm text-on-background placeholder-outline-variant outline-none py-sm resize-none" placeholder="An interesting title..." type="text"/>
+<!-- Content Textarea -->
+<textarea class="w-full min-h-[300px] bg-transparent border-none focus:ring-0 font-body-lg text-body-lg text-on-surface placeholder-outline-variant outline-none py-sm resize-none leading-relaxed" placeholder="Share your thoughts, spark a discussion..."></textarea>
+</div>
+<!-- Media/Attachments Card -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">image</span>
+                        Attached Media
+                    </h3>
+<button class="text-secondary hover:bg-surface-variant/50 p-xs rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+<!-- Horizontal scrollable image thumbnails -->
+<div class="flex overflow-x-auto space-x-sm pb-sm hide-scrollbar">
+<!-- Add Image Button -->
+<button class="flex-shrink-0 w-24 h-24 rounded-lg bg-surface-container flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors border border-dashed border-outline-variant">
+<span class="material-symbols-outlined mb-xs">add_photo_alternate</span>
+<span class="text-[10px] font-medium">Add</span>
+</button>
+<!-- Thumbnail 1 -->
+<div class="relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden group shadow-sm border border-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A close-up, highly detailed shot of a minimalist workspace. A sleek silver laptop sits on a clean, light wood desk. The lighting is natural, casting soft shadows, evoking a sense of calm productivity and modern design aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPeoR3KaFpG9Bfuy7bX4Rt3ygXDFge7d70gj_KdNpcOuTWjeTMUKP22VwxODYSz1yHOY0o6qX1efvmTaVPiO8yXCkGEIjuo23V-dhmWIxR1IBs4efXSqgqLYc9H-jKmCirN8G05V4kqzQRBpnvMgKx5X3CNCcjOdDjNe-2Lr-Uv43kDSwX88oCOx_sTqjd3XPB3pfOO9gQFYuxx9Xt9i4NZPs1MUyHAYkNsSRpzbPhFWDah_o7XmwW"/>
+<button class="absolute top-1 right-1 bg-surface-container-lowest/80 backdrop-blur-sm text-on-surface rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Thumbnail 2 -->
+<div class="relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden group shadow-sm border border-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Abstract geometric art featuring soft, rounded shapes in shades of indigo, slate, and white. The composition is balanced and serene, with subtle gradients suggesting depth and a modern, high-end digital aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9roBNxVpbz6uS00VEWrkJbW6ogYV-FwwfDedMhCtIdAXZiO_MLp0KMzfGofoPbcii0eXyVfU9BdNEzbowtf69jyo_ROgF3Fua6xgrgCF9rPMjUwirB5W0kIWQqPObFfommAHSNs479jZbPZQg4QaRytfaPSopEk0gI-9EexzVLNPbgIS14pJvQBQI2CPBySHuRMtI-TT16aC-tEyWCUFk9iwkpjoN_Qk_ICAEUzxMl4c7s9kOgc9"/>
+<button class="absolute top-1 right-1 bg-surface-container-lowest/80 backdrop-blur-sm text-on-surface rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Tags/Formatting Toolbar -->
+<div class="bg-surface-container-lowest rounded-xl p-sm shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex items-center justify-between">
+<div class="flex space-x-xs">
+<button class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface p-sm rounded-md transition-colors" title="Bold">
+<span class="material-symbols-outlined">format_bold</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface p-sm rounded-md transition-colors" title="Italic">
+<span class="material-symbols-outlined">format_italic</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface p-sm rounded-md transition-colors" title="Link">
+<span class="material-symbols-outlined">link</span>
+</button>
+<div class="w-px h-6 bg-surface-container-high mx-xs self-center"></div>
+<button class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface p-sm rounded-md transition-colors" title="Quote">
+<span class="material-symbols-outlined">format_quote</span>
+</button>
+</div>
+<!-- Tags Input -->
+<div class="flex items-center space-x-sm bg-surface-container-low rounded-lg px-sm py-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">tag</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-sm text-on-surface-variant placeholder-outline w-24 outline-none" placeholder="Add tags..." type="text"/>
+</div>
+</div>
+<!-- Mobile Bottom Action (Publish Button) -->
+<div class="md:hidden fixed bottom-0 left-0 w-full p-gutter bg-surface-container-lowest/90 backdrop-blur-md border-t border-surface-container shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-50">
+<button class="w-full bg-primary text-on-primary font-title-lg text-title-lg py-sm rounded-full hover:bg-primary-container transition-colors shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+                    Publish
+                </button>
+</div>
+<!-- Spacer for mobile bottom action -->
+<div class="md:hidden h-24 w-full"></div>
+</div>
+</main>
+<script>
+        // Simple auto-resize for textarea
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
+</body></html>
