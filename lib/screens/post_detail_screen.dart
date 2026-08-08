@@ -199,47 +199,43 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       // Multi-Image Viewer
                       if (post.imageUrls.isNotEmpty)
                         Column(
-                          children: post.imageUrls.map((url) => Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: url.startsWith('http://') || url.startsWith('https://') || kIsWeb
-                                  ? Image.network(
-                                      url,
-                                      width: double.infinity,
-                                      height: 250,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) => Container(
-                                        height: 200,
-                                        color: const Color(0xFFE9E8E7),
-                                        child: const Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
+                          children: post.imageUrls.map((url) {
+                            final isNetworkOrWeb = kIsWeb ||
+                                url.startsWith('http://') ||
+                                url.startsWith('https://') ||
+                                url.startsWith('blob:') ||
+                                url.startsWith('data:');
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: isNetworkOrWeb
+                                    ? Image.network(
+                                        url,
+                                        width: double.infinity,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) => Container(
+                                          height: 200,
+                                          color: const Color(0xFFE9E8E7),
+                                          child: const Icon(Icons.broken_image, size: 64, color: Color(0xFFC4C7C7)),
+                                        ),
+                                      )
+                                    : Image.file(
+                                        File(url),
+                                        width: double.infinity,
+                                        height: 250,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) => Container(
+                                          height: 200,
+                                          color: const Color(0xFFE9E8E7),
+                                          child: const Icon(Icons.broken_image, size: 64, color: Color(0xFFC4C7C7)),
+                                        ),
                                       ),
-                                    )
-                                  : Image.file(
-                                      File(url),
-                                      width: double.infinity,
-                                      height: 250,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) => Container(
-                                        height: 200,
-                                        color: const Color(0xFFE9E8E7),
-                                        child: const Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
-                                      ),
-                                    ),
-                            ),
-                          )).toList(),
-                        )
-                      else
-                        Container(
-                          height: 250,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE9E8E7),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Center(
-                            child: Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
-                          ),
+                              ),
+                            );
+                          }).toList(),
                         ),
                       const SizedBox(height: 24),
                       Text(

@@ -211,55 +211,52 @@ class _FeedScreenState extends State<FeedScreen> {
             // Media Multi-Image Preview Carousel / Grid
             if (post.imageUrls.isNotEmpty)
               Container(
-                height: 192,
+                height: 200,
                 width: double.infinity,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: post.imageUrls.length,
                   itemBuilder: (context, idx) {
+                    final url = post.imageUrls[idx];
+                    final isNetworkOrWeb = kIsWeb ||
+                        url.startsWith('http://') ||
+                        url.startsWith('https://') ||
+                        url.startsWith('blob:') ||
+                        url.startsWith('data:');
+
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: post.imageUrls[idx].startsWith('http://') || post.imageUrls[idx].startsWith('https://') || kIsWeb
+                        child: isNetworkOrWeb
                             ? Image.network(
-                                post.imageUrls[idx],
-                                width: 240,
-                                height: 192,
+                                url,
+                                width: post.imageUrls.length == 1 ? 360 : 240,
+                                height: 200,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) => Container(
-                                  width: 192,
+                                  width: 240,
+                                  height: 200,
                                   color: const Color(0xFFE9E8E7),
-                                  child: const Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
+                                  child: const Icon(Icons.broken_image, size: 48, color: Color(0xFFC4C7C7)),
                                 ),
                               )
                             : Image.file(
-                                File(post.imageUrls[idx]),
-                                width: 240,
-                                height: 192,
+                                File(url),
+                                width: post.imageUrls.length == 1 ? 360 : 240,
+                                height: 200,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) => Container(
-                                  width: 192,
+                                  width: 240,
+                                  height: 200,
                                   color: const Color(0xFFE9E8E7),
-                                  child: const Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
+                                  child: const Icon(Icons.broken_image, size: 48, color: Color(0xFFC4C7C7)),
                                 ),
                               ),
                       ),
                     );
                   },
-                ),
-              )
-            else
-              Container(
-                height: 192,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE9E8E7),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
                 ),
               ),
             const SizedBox(height: 12),
