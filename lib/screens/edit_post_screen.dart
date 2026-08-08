@@ -77,25 +77,36 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
     setState(() => _isSaving = true);
 
-    final tagsText = _tagsController.text.trim();
-    final tags = tagsText.isEmpty
-        ? <String>[]
-        : tagsText.split(',').map((t) => t.trim().replaceAll('#', '')).where((t) => t.isNotEmpty).toList();
+    try {
+      final tagsText = _tagsController.text.trim();
+      final tags = tagsText.isEmpty
+          ? <String>[]
+          : tagsText.split(',').map((t) => t.trim().replaceAll('#', '')).where((t) => t.isNotEmpty).toList();
 
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
-    await postProvider.updatePost(
-      id: widget.postId,
-      title: title,
-      content: content,
-      community: _selectedCommunity,
-      tags: tags,
-      existingImageUrls: _existingImageUrls,
-      newImageFiles: _newImageFiles,
-    );
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
+      await postProvider.updatePost(
+        id: widget.postId,
+        title: title,
+        content: content,
+        community: _selectedCommunity,
+        tags: tags,
+        existingImageUrls: _existingImageUrls,
+        newImageFiles: _newImageFiles,
+      );
 
-    if (mounted) {
-      setState(() => _isSaving = false);
-      context.pop();
+      if (mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Saving post failed: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 

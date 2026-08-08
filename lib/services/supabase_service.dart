@@ -293,4 +293,8 @@ class SupabaseService {
       createdAt: DateTime.parse(res['created_at']),
     );
   }
+
+  Future<void> deleteComment(String commentId) async {
+    await _client.from('comments').delete().eq('id', commentId);
+  }
 }

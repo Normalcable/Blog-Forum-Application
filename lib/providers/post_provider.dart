@@ -116,22 +116,36 @@ class PostProvider extends ChangeNotifier {
   }) async {
     List<String> imageUrls = [];
 
-    if (SupabaseConfig.isConfigured && imageFiles.isNotEmpty) {
-      imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts');
+    if (imageFiles.isNotEmpty) {
+      if (SupabaseConfig.isConfigured) {
+        try {
+          imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts').timeout(const Duration(seconds: 15));
+        } catch (e) {
+          debugPrint('Supabase image upload failed/timed out, using local image paths: $e');
+          imageUrls = imageFiles.map((f) => f.path).toList();
+        }
+      } else {
+        imageUrls = imageFiles.map((f) => f.path).toList();
+      }
     }
 
     if (SupabaseConfig.isConfigured) {
-      final newPost = await _supabaseService.createPost(
-        title: title,
-        content: content,
-        community: community,
-        tags: tags,
-        imageUrls: imageUrls,
-      );
-      if (newPost != null) {
-        _posts.insert(0, newPost);
-        notifyListeners();
-        return;
+      try {
+        final newPost = await _supabaseService.createPost(
+          title: title,
+          content: content,
+          community: community,
+          tags: tags,
+          imageUrls: imageUrls,
+        ).timeout(const Duration(seconds: 10));
+
+        if (newPost != null) {
+          _posts.insert(0, newPost);
+          notifyListeners();
+          return;
+        }
+      } catch (e) {
+        debugPrint('Supabase post creation failed/timed out, adding post locally: $e');
       }
     }
 
@@ -166,9 +180,18 @@ class PostProvider extends ChangeNotifier {
     if (index != -1) {
       List<String> finalUrls = List.from(existingImageUrls ?? _posts[index].imageUrls);
 
-      if (SupabaseConfig.isConfigured && newImageFiles.isNotEmpty) {
-        final uploaded = await _supabaseService.uploadImages(newImageFiles, 'posts');
-        finalUrls.addAll(uploaded);
+      if (newImageFiles.isNotEmpty) {
+        if (SupabaseConfig.isConfigured) {
+          try {
+            final uploaded = await _supabaseService.uploadImages(newImageFiles, 'posts').timeout(const Duration(seconds: 15));
+            finalUrls.addAll(uploaded);
+          } catch (e) {
+            debugPrint('Supabase image upload failed, keeping local paths: $e');
+            finalUrls.addAll(newImageFiles.map((f) => f.path));
+          }
+        } else {
+          finalUrls.addAll(newImageFiles.map((f) => f.path));
+        }
       }
 
       _posts[index] = _posts[index].copyWith(
@@ -181,14 +204,18 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
 
       if (SupabaseConfig.isConfigured) {
-        await _supabaseService.updatePost(
-          postId: id,
-          title: title,
-          content: content,
-          community: community,
-          tags: tags,
-          imageUrls: finalUrls,
-        );
+        try {
+          await _supabaseService.updatePost(
+            postId: id,
+            title: title,
+            content: content,
+            community: community,
+            tags: tags,
+            imageUrls: finalUrls,
+          ).timeout(const Duration(seconds: 10));
+        } catch (e) {
+          debugPrint('Supabase post update failed/timed out: $e');
+        }
       }
     }
   }

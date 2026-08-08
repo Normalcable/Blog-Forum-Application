@@ -60,8 +60,12 @@ class CommentProvider extends ChangeNotifier {
   }) async {
     List<String> imageUrls = [];
 
-    if (SupabaseConfig.isConfigured && imageFiles.isNotEmpty) {
-      imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts');
+    if (imageFiles.isNotEmpty) {
+      if (SupabaseConfig.isConfigured) {
+        imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts');
+      } else {
+        imageUrls = imageFiles.map((f) => f.path).toList();
+      }
     }
 
     if (SupabaseConfig.isConfigured) {
@@ -108,6 +112,17 @@ class CommentProvider extends ChangeNotifier {
         notifyListeners();
         break;
       }
+    }
+  }
+
+  Future<void> deleteComment(String postId, String commentId) async {
+    if (_commentsByPostId.containsKey(postId)) {
+      _commentsByPostId[postId]!.removeWhere((c) => c.id == commentId);
+      notifyListeners();
+    }
+
+    if (SupabaseConfig.isConfigured) {
+      await _supabaseService.deleteComment(commentId);
     }
   }
 }

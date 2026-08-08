@@ -106,8 +106,12 @@ class AuthProvider extends ChangeNotifier {
     XFile? newAvatarFile,
   }) async {
     String? newAvatarUrl;
-    if (newAvatarFile != null && SupabaseConfig.isConfigured) {
-      newAvatarUrl = await _supabaseService.uploadAvatar(newAvatarFile);
+    if (newAvatarFile != null) {
+      if (SupabaseConfig.isConfigured) {
+        newAvatarUrl = await _supabaseService.uploadAvatar(newAvatarFile);
+      } else {
+        newAvatarUrl = newAvatarFile.path;
+      }
     }
 
     _currentUser = _currentUser.copyWith(

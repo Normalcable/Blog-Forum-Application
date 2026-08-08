@@ -203,17 +203,29 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             padding: const EdgeInsets.only(bottom: 16.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                url,
-                                width: double.infinity,
-                                height: 250,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Container(
-                                  height: 200,
-                                  color: const Color(0xFFE9E8E7),
-                                  child: const Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
-                                ),
-                              ),
+                              child: url.startsWith('http://') || url.startsWith('https://') || kIsWeb
+                                  ? Image.network(
+                                      url,
+                                      width: double.infinity,
+                                      height: 250,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => Container(
+                                        height: 200,
+                                        color: const Color(0xFFE9E8E7),
+                                        child: const Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
+                                      ),
+                                    )
+                                  : Image.file(
+                                      File(url),
+                                      width: double.infinity,
+                                      height: 250,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) => Container(
+                                        height: 200,
+                                        color: const Color(0xFFE9E8E7),
+                                        child: const Icon(Icons.image, size: 64, color: Color(0xFFC4C7C7)),
+                                      ),
+                                    ),
                             ),
                           )).toList(),
                         )
@@ -281,18 +293,24 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   )
                 else
-                  ...comments.map((comment) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: _buildComment(
-                      author: comment.authorName,
-                      time: 'Just now',
-                      content: comment.content,
-                      imageUrls: comment.imageUrls,
-                      likes: '${comment.likesCount}',
-                      isLiked: comment.isLiked,
-                      onLikeToggle: () => commentProvider.toggleLikeComment(comment.id),
-                    ),
-                  )),
+                  ...comments.map((comment) {
+                    final isCommentAuthor = comment.authorId == currentUser.id;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: _buildComment(
+                        author: comment.authorName,
+                        avatarUrl: comment.authorAvatarUrl,
+                        time: 'Just now',
+                        content: comment.content,
+                        imageUrls: comment.imageUrls,
+                        likes: '${comment.likesCount}',
+                        isLiked: comment.isLiked,
+                        isOwner: isCommentAuthor,
+                        onLikeToggle: () => commentProvider.toggleLikeComment(comment.id),
+                        onDelete: () => commentProvider.deleteComment(post.id, comment.id),
+                      ),
+                    );
+                  }),
               ],
             ),
           ),
@@ -449,20 +467,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   Widget _buildComment({
     required String author,
+    String? avatarUrl,
     required String time,
     required String content,
     required List<String> imageUrls,
     required String likes,
     required bool isLiked,
+    required bool isOwner,
     required VoidCallback onLikeToggle,
+    required VoidCallback onDelete,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 20,
-          backgroundColor: Color(0xFFE9E8E7),
-          child: Icon(Icons.person, size: 24, color: Color(0xFF444748)),
+          backgroundColor: const Color(0xFFE9E8E7),
+          backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
+          child: avatarUrl == null || avatarUrl.isEmpty
+              ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
+              : null,
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -484,23 +508,33 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      author,
-                      style: GoogleFonts.hankenGrotesk(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          author,
+                          style: GoogleFonts.hankenGrotesk(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          time,
+                          style: GoogleFonts.hankenGrotesk(
+                            fontSize: 12,
+                            color: const Color(0xFF444748),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      time,
-                      style: GoogleFonts.hankenGrotesk(
-                        fontSize: 12,
-                        color: const Color(0xFF444748),
+                    if (isOwner)
+                      GestureDetector(
+                        onTap: onDelete,
+                        child: const Icon(Icons.delete_outline, size: 18, color: Color(0xFFBA1A1A)),
                       ),
-                    ),
                   ],
                 ),
                 if (content.isNotEmpty) ...[
@@ -520,12 +554,19 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     runSpacing: 8,
                     children: imageUrls.map((url) => ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        url,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
+                      child: url.startsWith('http://') || url.startsWith('https://') || kIsWeb
+                          ? Image.network(
+                              url,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.file(
+                              File(url),
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
                     )).toList(),
                   ),
                 ],

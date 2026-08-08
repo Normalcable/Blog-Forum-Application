@@ -64,3 +64,14 @@ Welcome to the development diary of **Discourse**, a minimalist web & mobile for
 
 - **Strict Auth Validation**: Refactored `LoginScreen` and `RegisterScreen` to validate credentials directly against Supabase Auth, blocking invalid attempts and displaying user error feedback.
 - **Live Database Streaming**: Refactored `PostProvider` and `CommentProvider` to remove hardcoded mock placeholders when connected to Supabase and stream real discussions and responses directly from PostgreSQL tables.
+
+---
+
+### 🖼️ Entry 7: Full Media Storage Integration, Comment Deletion & Profile Photo CRUD
+> *"Fulfilling complete CRUD operations across posts, responses, and user profiles."*
+
+- **Comment Deletion**: Implemented owner-restricted comment deletion in `SupabaseService.deleteComment`, `CommentProvider.deleteComment`, and updated `PostDetailScreen` with interactive trash action icons.
+- **Comment Images**: Enabled image attachment picking, previewing, and multi-image uploads to Supabase Storage (`posts` bucket) for response threads.
+- **Profile Photo CRUD**: Wired avatar picking, previewing, uploading to Supabase Storage (`avatars` bucket), and updating `avatar_url` across `AuthProvider`, `ProfileScreen`, and app navigation bars.
+- **Post Multi-Image CRUD & Local Fallbacks**: Enhanced post creation and editing with interactive thumbnail previews, selective image removal, and cross-platform image path resolution for seamless offline and online operation.
+

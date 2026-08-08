@@ -57,20 +57,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _saveProfile() async {
     setState(() => _isSaving = true);
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
 
-    await auth.updateProfile(
-      displayName: _displayNameController.text.trim(),
-      username: _usernameController.text.trim(),
-      bio: _bioController.text.trim(),
-      newAvatarFile: _newAvatarFile,
-    );
-
-    if (mounted) {
-      setState(() => _isSaving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully!')),
+      await auth.updateProfile(
+        displayName: _displayNameController.text.trim(),
+        username: _usernameController.text.trim(),
+        bio: _bioController.text.trim(),
+        newAvatarFile: _newAvatarFile,
       );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
@@ -90,7 +101,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ? NetworkImage(_newAvatarFile!.path)
           : FileImage(File(_newAvatarFile!.path)) as ImageProvider;
     } else if (currentUser.avatarUrl != null && currentUser.avatarUrl!.isNotEmpty) {
-      avatarImage = NetworkImage(currentUser.avatarUrl!);
+      final url = currentUser.avatarUrl!;
+      if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+        avatarImage = NetworkImage(url);
+      } else {
+        avatarImage = FileImage(File(url)) as ImageProvider;
+      }
     }
 
     return Scaffold(

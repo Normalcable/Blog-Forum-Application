@@ -52,29 +52,40 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
     setState(() => _isPublishing = true);
 
-    final tagsText = _tagsController.text.trim();
-    final tags = tagsText.isEmpty
-        ? <String>[]
-        : tagsText.split(',').map((t) => t.trim().replaceAll('#', '')).where((t) => t.isNotEmpty).toList();
+    try {
+      final tagsText = _tagsController.text.trim();
+      final tags = tagsText.isEmpty
+          ? <String>[]
+          : tagsText.split(',').map((t) => t.trim().replaceAll('#', '')).where((t) => t.isNotEmpty).toList();
 
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
-    final user = authProvider.currentUser;
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
+      final user = authProvider.currentUser;
 
-    await postProvider.addPost(
-      title: title,
-      content: content,
-      community: _selectedCommunity,
-      tags: tags,
-      imageFiles: _selectedImageFiles,
-      authorName: user.displayName,
-      authorHandle: '@${user.username}',
-      authorId: user.id,
-    );
+      await postProvider.addPost(
+        title: title,
+        content: content,
+        community: _selectedCommunity,
+        tags: tags,
+        imageFiles: _selectedImageFiles,
+        authorName: user.displayName,
+        authorHandle: '@${user.username}',
+        authorId: user.id,
+      );
 
-    if (mounted) {
-      setState(() => _isPublishing = false);
-      context.pop();
+      if (mounted) {
+        context.pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Publishing post failed: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isPublishing = false);
+      }
     }
   }
 

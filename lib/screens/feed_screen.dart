@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import '../providers/auth_provider.dart';
 import '../providers/post_provider.dart';
 import '../providers/comment_provider.dart';
 import '../models/post_model.dart';
@@ -27,9 +30,21 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
     final postProvider = Provider.of<PostProvider>(context);
     final commentProvider = Provider.of<CommentProvider>(context);
     final posts = postProvider.posts;
+    final user = authProvider.currentUser;
+
+    ImageProvider? userAvatar;
+    if (user.avatarUrl != null && user.avatarUrl!.isNotEmpty) {
+      final url = user.avatarUrl!;
+      if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+        userAvatar = NetworkImage(url);
+      } else {
+        userAvatar = FileImage(File(url)) as ImageProvider;
+      }
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFFBF9F8),
@@ -56,10 +71,13 @@ class _FeedScreenState extends State<FeedScreen> {
             padding: const EdgeInsets.only(right: 16.0),
             child: GestureDetector(
               onTap: () => context.push('/profile'),
-              child: const CircleAvatar(
+              child: CircleAvatar(
                 radius: 16,
-                backgroundColor: Color(0xFFE4E2E2),
-                child: Icon(Icons.person, color: Color(0xFF444748), size: 20),
+                backgroundColor: const Color(0xFFE4E2E2),
+                backgroundImage: userAvatar,
+                child: userAvatar == null
+                    ? const Icon(Icons.person, color: Color(0xFF444748), size: 20)
+                    : null,
               ),
             ),
           ),
@@ -204,17 +222,29 @@ class _FeedScreenState extends State<FeedScreen> {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          post.imageUrls[idx],
-                          width: 240,
-                          height: 192,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            width: 192,
-                            color: const Color(0xFFE9E8E7),
-                            child: const Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
-                          ),
-                        ),
+                        child: post.imageUrls[idx].startsWith('http://') || post.imageUrls[idx].startsWith('https://') || kIsWeb
+                            ? Image.network(
+                                post.imageUrls[idx],
+                                width: 240,
+                                height: 192,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  width: 192,
+                                  color: const Color(0xFFE9E8E7),
+                                  child: const Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
+                                ),
+                              )
+                            : Image.file(
+                                File(post.imageUrls[idx]),
+                                width: 240,
+                                height: 192,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) => Container(
+                                  width: 192,
+                                  color: const Color(0xFFE9E8E7),
+                                  child: const Icon(Icons.image, size: 48, color: Color(0xFFC4C7C7)),
+                                ),
+                              ),
                       ),
                     );
                   },
@@ -283,15 +313,26 @@ class _FeedScreenState extends State<FeedScreen> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 12,
-                      backgroundColor: const Color(0xFFE9E8E7),
-                      backgroundImage: post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty
-                          ? NetworkImage(post.authorAvatarUrl!)
-                          : null,
-                      child: post.authorAvatarUrl == null || post.authorAvatarUrl!.isEmpty
-                          ? const Icon(Icons.person, size: 16, color: Color(0xFF444748))
-                          : null,
+                    Builder(
+                      builder: (context) {
+                        ImageProvider? authorAvatar;
+                        if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
+                          final url = post.authorAvatarUrl!;
+                          if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+                            authorAvatar = NetworkImage(url);
+                          } else {
+                            authorAvatar = FileImage(File(url)) as ImageProvider;
+                          }
+                        }
+                        return CircleAvatar(
+                          radius: 12,
+                          backgroundColor: const Color(0xFFE9E8E7),
+                          backgroundImage: authorAvatar,
+                          child: authorAvatar == null
+                              ? const Icon(Icons.person, size: 16, color: Color(0xFF444748))
+                              : null,
+                        );
+                      },
                     ),
                     const SizedBox(width: 8),
                     Text(
