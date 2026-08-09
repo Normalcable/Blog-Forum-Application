@@ -10,6 +10,7 @@ import '../screens/create_post_screen.dart';
 import '../screens/edit_post_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/search_screen.dart';
+import '../screens/activity_screen.dart';
 
 class AppRouter {
   static GoRouter createRouter(AuthProvider authProvider) {
@@ -25,11 +26,12 @@ class AppRouter {
         if (!isLoggedIn && !isGoingToLogin && !isGoingToRegister) {
           final isGoingToFeed = state.matchedLocation == '/';
           final isGoingToSearch = state.matchedLocation == '/search';
+          final isGoingToActivity = state.matchedLocation == '/activity';
           final isGoingToPostDetail = state.matchedLocation.startsWith('/post/') &&
               !state.matchedLocation.contains('/edit') &&
               !state.matchedLocation.contains('/create');
           
-          if (!isGoingToFeed && !isGoingToPostDetail && !isGoingToSearch) {
+          if (!isGoingToFeed && !isGoingToPostDetail && !isGoingToSearch && !isGoingToActivity) {
             return '/login';
           }
         }
@@ -56,6 +58,10 @@ class AppRouter {
         GoRoute(
           path: '/search',
           builder: (context, state) => const SearchScreen(),
+        ),
+        GoRoute(
+          path: '/activity',
+          builder: (context, state) => const ActivityScreen(),
         ),
         GoRoute(
           path: '/post/create',

@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Discourse - Activity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&amp;family=Libre+Caslon+Text:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#747878",
+                        "background": "#fbf9f8",
+                        "surface-bright": "#fbf9f8",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#1b1c19",
+                        "secondary-fixed": "#ffdea5",
+                        "surface": "#fbf9f8",
+                        "on-tertiary-fixed": "#1b1c19",
+                        "secondary": "#775a19",
+                        "on-primary": "#ffffff",
+                        "primary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "tertiary-fixed-dim": "#c8c6c2",
+                        "surface-container": "#efeded",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#e4e2dd",
+                        "on-surface-variant": "#444748",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#f2f0f0",
+                        "on-primary-fixed-variant": "#474646",
+                        "secondary-container": "#fed488",
+                        "on-primary-container": "#858383",
+                        "surface-container-low": "#f5f3f3",
+                        "primary-container": "#1c1b1b",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#303031",
+                        "on-background": "#1b1c1c",
+                        "outline-variant": "#c4c7c7",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary-container": "#848480",
+                        "secondary-fixed-dim": "#e9c176",
+                        "surface-dim": "#dbdad9",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#785a1a",
+                        "surface-tint": "#5f5e5e",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface-container-highest": "#e4e2e2",
+                        "surface-container-high": "#e9e8e7",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "on-secondary-fixed": "#261900",
+                        "surface-variant": "#e4e2e2",
+                        "on-secondary-fixed-variant": "#5d4201",
+                        "on-primary-fixed": "#1c1b1b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "container-max": "1200px",
+                        "gutter": "32px",
+                        "unit": "8px",
+                        "stack-lg": "48px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "stack-sm": "12px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "title-lg": ["Hanken Grotesk"],
+                        "headline-sm": ["Libre Caslon Text"],
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-md": ["Hanken Grotesk"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fbf9f8;
+            color: #1b1c1c;
+        }
+        .hairline-divider {
+            border-bottom: 1px solid #e5e2e1;
+        }
+        .notification-item {
+            transition: background-color 0.3s ease;
+        }
+        .notification-item:hover {
+            background-color: #f5f3f3;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pt-16 pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-4 cursor-pointer active:opacity-70 hover:bg-surface-container-low transition-colors duration-300 p-2 rounded-full">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small, high-quality, professional headshot avatar of a sophisticated individual against a neutral beige background. The portrait is crisp, with soft studio lighting typical of a high-end corporate or editorial profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBojtiGfmH4AR4hEx5TlJuUYtzrI-CGlusYIGr2IIB_5cLQoDJUjZH4u6H6thPTxMv-U1UqVeBbQDDpvguEuWGvSEWZYko6AQM2gQ48uAQxKYss2aEizpjw5GFDoF4TZSV-1JdX-sWAmjvhThaHGldXlU3j_r-GjV5IuFe-Lh92tSaC_-ZcAUHnEn6Bk1d3pemn7z-JtnqJIB_HrmSs9lpgiVaCUf9rh8PYf5B-Pf7UeNBN24dzfAjx">
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-headline-md text-primary tracking-tight">Discourse</h1>
+<div class="flex items-center cursor-pointer active:opacity-70 hover:bg-surface-container-low transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-stack-lg">Activity</h2>
+<div class="flex flex-col gap-stack-lg"><section>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-stack-sm tracking-widest uppercase mt-stack-md">Your Posts</h3>
+<ul class="flex flex-col">
+<li class="notification-item py-4 hairline-divider flex items-start gap-4">
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">
+<span class="font-semibold text-primary">You</span> published <span class="italic">"The Future of Minimalist Design"</span>.
+</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">1d ago</p>
+</div>
+</li>
+</ul>
+</section>
+
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-stack-sm tracking-widest uppercase mt-stack-md">Replies</h3>
+<ul class="flex flex-col">
+<li class="notification-item py-4 hairline-divider flex items-start gap-4">
+<img class="w-10 h-10 rounded-full object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEbcyjaYgCZxYWYGQS3u_YyedqwN6mzJnJQHMYODCHOCNODs9YtyetwVJRxOo7wQSP8rfM6SPvjFqqtaBfnL1FTSuIj5D6QbdyYvNODe6fjvfb6TWQ4IHmdg5VVBtfcKP3y7eKxnTNNK4rg8uVyXaNNrNoc8s1VfTickPpoAEpOqQUqsyhL2mIiPTqj1Ia_TFm00L8906ayTPYzlFD8Fw8LuRjvQTUUHxWU_MrDBZKzj9a0kveSCwP" alt="David Chen">
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">
+<span class="font-semibold text-primary">David Chen</span> replied to your comment on <span class="italic">"Quiet Luxury in UI"</span>.
+</p>
+<div class="mt-2 p-3 bg-surface-container-lowest border border-outline-variant rounded-lg">
+<p class="font-body-md text-body-md text-on-surface-variant italic">"I completely agree with the use of tonal layers..."</p>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">4h ago</p>
+</div>
+</li>
+</ul>
+</section>
+
+<section>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-stack-sm tracking-widest uppercase mt-stack-md">Liked Posts</h3>
+<ul class="flex flex-col">
+<li class="notification-item py-4 hairline-divider flex items-start gap-4">
+<img class="w-10 h-10 rounded-full object-cover flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdLSDbbuYwAo1bI46Nug6wowboXxU5bW7iI3BlSEexvs8NFKamUx4_hkZabFYkZ6UskYj-dmE9A7m-HXzuMCOoKXyC_gV4NO6P1esQwEahzuzjyhdkq_92PhF1_bEGuXmVFH6ozcIxfJ7DaJXZzT2bd0aU5J9t-pzLwh4e4VYsKVAWZhfI-mmywRiYSxs4YvwyjRhjXiA-lwyUCC2ZFSy2EdDJ8fZsyz4i12pVELbOvzFFclShVEna" alt="Elena Rostova">
+<div class="flex-grow">
+<p class="font-body-md text-body-md text-on-surface">
+<span class="font-semibold text-primary">Elena Rostova</span> liked your post <span class="italic">"The Nuances of Modern Typography"</span>.
+</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">2h ago</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant flex-shrink-0" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</li>
+</ul>
+</section></div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center bg-surface border-t border-outline-variant px-margin-mobile pb-safe h-20">
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-primary transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-primary transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary border-t-2 border-primary pt-2 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="insights" data-weight="fill" style="font-variation-settings: 'FILL' 1;">insights</span>
+<span class="font-label-sm text-label-sm mt-1">Activity</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-primary transition-all active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1">Profile</span>
+</a>
+</nav>
+<!-- Desktop Navigation (Side/Top fallback if needed, but per instructions staying with simple TopAppBar) -->
+
+
+</body></html>

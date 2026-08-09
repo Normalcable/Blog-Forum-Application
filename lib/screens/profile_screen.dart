@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../providers/auth_provider.dart';
 import '../providers/post_provider.dart';
 import '../providers/comment_provider.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -18,52 +19,38 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final int _selectedIndex = 3;
-
   late TextEditingController _displayNameController;
   late TextEditingController _usernameController;
   late TextEditingController _bioController;
   XFile? _newAvatarFile;
-  bool _initialized = false;
   bool _isSaving = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_initialized) {
-      final user = Provider.of<AuthProvider>(context, listen: false).currentUser;
-      _displayNameController = TextEditingController(text: user.displayName);
-      _usernameController = TextEditingController(text: user.username);
-      _bioController = TextEditingController(text: user.bio);
-      _initialized = true;
-    }
-  }
-
-  void _onItemTapped(int index) {
-    if (index != _selectedIndex) {
-      if (index == 0) {
-        context.push('/');
-      }
-    }
+  void initState() {
+    super.initState();
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    _displayNameController = TextEditingController(text: auth.currentUser.displayName);
+    _usernameController = TextEditingController(text: auth.currentUser.username);
+    _bioController = TextEditingController(text: auth.currentUser.bio);
   }
 
   Future<void> _pickAvatar() async {
     final picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
       setState(() {
-        _newAvatarFile = image;
+        _newAvatarFile = picked;
       });
     }
   }
 
-  void _saveProfile() async {
+  Future<void> _saveProfile() async {
     setState(() => _isSaving = true);
-    try {
-      final auth = Provider.of<AuthProvider>(context, listen: false);
-      final postProvider = Provider.of<PostProvider>(context, listen: false);
-      final commentProvider = Provider.of<CommentProvider>(context, listen: false);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final postProvider = Provider.of<PostProvider>(context, listen: false);
+    final commentProvider = Provider.of<CommentProvider>(context, listen: false);
 
+    try {
       await auth.updateProfile(
         displayName: _displayNameController.text.trim(),
         username: _usernameController.text.trim(),
@@ -85,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile: ${e.toString()}')),
+          SnackBar(content: Text('Failed to update profile: $e')),
         );
       }
     } finally {
@@ -95,7 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _logout() async {
+  Future<void> _logout() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
     await auth.logout();
     if (mounted) {
@@ -105,15 +92,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<AuthProvider>(context).currentUser;
+    final auth = Provider.of<AuthProvider>(context);
+    final user = auth.currentUser;
 
     ImageProvider? avatarImage;
     if (_newAvatarFile != null) {
-      avatarImage = kIsWeb
-          ? NetworkImage(_newAvatarFile!.path)
-          : FileImage(File(_newAvatarFile!.path)) as ImageProvider;
-    } else if (currentUser.avatarUrl != null && currentUser.avatarUrl!.isNotEmpty) {
-      final url = currentUser.avatarUrl!;
+      if (kIsWeb) {
+        avatarImage = NetworkImage(_newAvatarFile!.path);
+      } else {
+        avatarImage = FileImage(File(_newAvatarFile!.path));
+      }
+    } else if (user.avatarUrl != null && user.avatarUrl!.isNotEmpty) {
+      final url = user.avatarUrl!;
       if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
         avatarImage = NetworkImage(url);
       } else {
@@ -128,14 +118,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         scrolledUnderElevation: 4,
         shadowColor: const Color(0x0C000000),
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Color(0xFF444748)),
-          onPressed: () {},
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Center(
+            child: GestureDetector(
+              onTap: () {},
+              child: CircleAvatar(
+                radius: 16,
+                backgroundColor: const Color(0xFFE4E2E2),
+                backgroundImage: avatarImage,
+                child: avatarImage == null
+                    ? const Icon(Icons.person, color: Color(0xFF444748), size: 20)
+                    : null,
+              ),
+            ),
+          ),
         ),
         title: Text(
           'Discourse',
           style: GoogleFonts.libreCaslonText(
-            fontSize: 32,
+            fontSize: 28,
             fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
@@ -143,14 +145,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: const Color(0xFFE4E2E2),
-              backgroundImage: avatarImage,
-              child: avatarImage == null
-                  ? const Icon(Icons.person, color: Color(0xFF444748), size: 20)
-                  : null,
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: const Icon(Icons.search, color: Color(0xFF444748)),
+              onPressed: () => context.push('/search'),
             ),
           ),
         ],
@@ -312,35 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 80),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xCCFBF9F8),
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color(0xFF785A1A),
-        unselectedItemColor: const Color(0xFF444748),
-        selectedLabelStyle: GoogleFonts.hankenGrotesk(fontSize: 12, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: GoogleFonts.hankenGrotesk(fontSize: 12),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.forum),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 2),
     );
   }
 

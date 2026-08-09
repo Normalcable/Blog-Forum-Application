@@ -9,6 +9,7 @@ import '../providers/auth_provider.dart';
 import '../providers/comment_provider.dart';
 import '../providers/post_provider.dart';
 import '../services/supabase_service.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -258,6 +259,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 1),
     );
   }
 

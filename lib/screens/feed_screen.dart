@@ -8,6 +8,7 @@ import '../providers/auth_provider.dart';
 import '../providers/post_provider.dart';
 import '../providers/comment_provider.dart';
 import '../models/post_model.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -17,8 +18,6 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  int _selectedIndex = 0;
-
   @override
   void initState() {
     super.initState();
@@ -27,17 +26,6 @@ class _FeedScreenState extends State<FeedScreen> {
         Provider.of<PostProvider>(context, listen: false).fetchPosts(refresh: true);
       }
     });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    if (index == 1) {
-      context.push('/search');
-    } else if (index == 3) {
-      context.push('/profile');
-    }
   }
 
   @override
@@ -65,26 +53,9 @@ class _FeedScreenState extends State<FeedScreen> {
         elevation: 0,
         scrolledUnderElevation: 4,
         shadowColor: const Color(0x0C000000),
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Color(0xFF444748)),
-          onPressed: () {},
-        ),
-        title: Text(
-          'Discourse',
-          style: GoogleFonts.libreCaslonText(
-            fontSize: 32,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Color(0xFF444748)),
-            onPressed: () => context.push('/search'),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: Center(
             child: GestureDetector(
               onTap: () => context.push('/profile'),
               child: CircleAvatar(
@@ -95,6 +66,24 @@ class _FeedScreenState extends State<FeedScreen> {
                     ? const Icon(Icons.person, color: Color(0xFF444748), size: 20)
                     : null,
               ),
+            ),
+          ),
+        ),
+        title: Text(
+          'Discourse',
+          style: GoogleFonts.libreCaslonText(
+            fontSize: 28,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+              icon: const Icon(Icons.search, color: Color(0xFF444748)),
+              onPressed: () => context.push('/search'),
             ),
           ),
         ],
@@ -167,35 +156,7 @@ class _FeedScreenState extends State<FeedScreen> {
         shape: const CircleBorder(),
         child: const Icon(Icons.add, size: 28),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xCCFBF9F8),
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color(0xFF785A1A),
-        unselectedItemColor: const Color(0xFF444748),
-        selectedLabelStyle: GoogleFonts.hankenGrotesk(fontSize: 12, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: GoogleFonts.hankenGrotesk(fontSize: 12),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.forum),
-            label: 'Activity',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
     );
   }
 
