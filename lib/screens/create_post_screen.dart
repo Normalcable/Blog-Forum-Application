@@ -71,6 +71,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         authorName: user.displayName,
         authorHandle: '@${user.username}',
         authorId: user.id,
+        authorAvatarUrl: user.avatarUrl,
       );
 
       if (mounted) {

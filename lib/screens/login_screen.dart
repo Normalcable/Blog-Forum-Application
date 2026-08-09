@@ -137,17 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: const Color(0xFF1B1C1C),
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Forgot password?',
-                              style: GoogleFonts.hankenGrotesk(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xFF775A19), // text-secondary
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                       const SizedBox(height: 8),

@@ -35,6 +35,7 @@ class PostModel {
     String? community,
     List<String>? tags,
     List<String>? imageUrls,
+    String? authorAvatarUrl,
     int? likesCount,
     bool? isLiked,
   }) {
@@ -43,7 +44,7 @@ class PostModel {
       authorId: authorId,
       authorName: authorName,
       authorHandle: authorHandle,
-      authorAvatarUrl: authorAvatarUrl,
+      authorAvatarUrl: authorAvatarUrl ?? this.authorAvatarUrl,
       title: title ?? this.title,
       content: content ?? this.content,
       community: community ?? this.community,

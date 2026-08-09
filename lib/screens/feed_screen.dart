@@ -39,7 +39,7 @@ class _FeedScreenState extends State<FeedScreen> {
     ImageProvider? userAvatar;
     if (user.avatarUrl != null && user.avatarUrl!.isNotEmpty) {
       final url = user.avatarUrl!;
-      if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
         userAvatar = NetworkImage(url);
       } else {
         userAvatar = FileImage(File(url)) as ImageProvider;

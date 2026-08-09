@@ -56,6 +56,7 @@ class CommentProvider extends ChangeNotifier {
     required String content,
     required String authorId,
     required String authorName,
+    String? authorAvatarUrl,
     List<XFile> imageFiles = const [],
   }) async {
     List<String> imageUrls = [];
@@ -89,6 +90,7 @@ class CommentProvider extends ChangeNotifier {
       postId: postId,
       authorId: authorId,
       authorName: authorName,
+      authorAvatarUrl: authorAvatarUrl,
       content: content,
       imageUrls: imageUrls,
       createdAt: DateTime.now(),
@@ -100,6 +102,21 @@ class CommentProvider extends ChangeNotifier {
     }
     _commentsByPostId[postId]!.add(localComment);
     notifyListeners();
+  }
+
+  void updateUserAvatar(String userId, String avatarUrl) {
+    bool updated = false;
+    for (var list in _commentsByPostId.values) {
+      for (int i = 0; i < list.length; i++) {
+        if (list[i].authorId == userId) {
+          list[i] = list[i].copyWith(authorAvatarUrl: avatarUrl);
+          updated = true;
+        }
+      }
+    }
+    if (updated) {
+      notifyListeners();
+    }
   }
 
   void toggleLikeComment(String commentId) {

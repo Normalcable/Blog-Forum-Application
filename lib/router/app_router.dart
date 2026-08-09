@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
 import '../screens/login_screen.dart';
@@ -12,11 +11,11 @@ import '../screens/edit_post_screen.dart';
 import '../screens/profile_screen.dart';
 
 class AppRouter {
-  static GoRouter router(BuildContext context) {
+  static GoRouter createRouter(AuthProvider authProvider) {
     return GoRouter(
-      initialLocation: '/login',
+      initialLocation: authProvider.isLoggedIn ? '/' : '/login',
+      refreshListenable: authProvider,
       redirect: (BuildContext context, GoRouterState state) {
-        final authProvider = Provider.of<AuthProvider>(context, listen: false);
         final isLoggedIn = authProvider.isLoggedIn;
         
         final isGoingToLogin = state.matchedLocation == '/login';
@@ -24,7 +23,9 @@ class AppRouter {
         
         if (!isLoggedIn && !isGoingToLogin && !isGoingToRegister) {
           final isGoingToFeed = state.matchedLocation == '/';
-          final isGoingToPostDetail = state.matchedLocation.startsWith('/post/') && !state.matchedLocation.contains('/edit') && !state.matchedLocation.contains('/create');
+          final isGoingToPostDetail = state.matchedLocation.startsWith('/post/') &&
+              !state.matchedLocation.contains('/edit') &&
+              !state.matchedLocation.contains('/create');
           
           if (!isGoingToFeed && !isGoingToPostDetail) {
             return '/login';

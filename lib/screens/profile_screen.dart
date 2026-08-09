@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/post_provider.dart';
+import '../providers/comment_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -59,6 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() => _isSaving = true);
     try {
       final auth = Provider.of<AuthProvider>(context, listen: false);
+      final postProvider = Provider.of<PostProvider>(context, listen: false);
+      final commentProvider = Provider.of<CommentProvider>(context, listen: false);
 
       await auth.updateProfile(
         displayName: _displayNameController.text.trim(),
@@ -66,6 +70,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         bio: _bioController.text.trim(),
         newAvatarFile: _newAvatarFile,
       );
+
+      final updatedUser = auth.currentUser;
+      if (updatedUser.avatarUrl != null && updatedUser.avatarUrl!.isNotEmpty) {
+        postProvider.updateUserAvatar(updatedUser.id, updatedUser.avatarUrl!);
+        commentProvider.updateUserAvatar(updatedUser.id, updatedUser.avatarUrl!);
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,10 +95,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _logout() {
+  void _logout() async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    auth.logout();
-    context.go('/login');
+    await auth.logout();
+    if (mounted) {
+      context.go('/login');
+    }
   }
 
   @override
@@ -102,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           : FileImage(File(_newAvatarFile!.path)) as ImageProvider;
     } else if (currentUser.avatarUrl != null && currentUser.avatarUrl!.isNotEmpty) {
       final url = currentUser.avatarUrl!;
-      if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
         avatarImage = NetworkImage(url);
       } else {
         avatarImage = FileImage(File(url)) as ImageProvider;

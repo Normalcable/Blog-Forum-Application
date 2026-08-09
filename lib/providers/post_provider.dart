@@ -120,6 +120,7 @@ class PostProvider extends ChangeNotifier {
     required String authorName,
     required String authorHandle,
     required String authorId,
+    String? authorAvatarUrl,
   }) async {
     List<String> imageUrls = [];
 
@@ -152,6 +153,7 @@ class PostProvider extends ChangeNotifier {
       authorId: authorId,
       authorName: authorName,
       authorHandle: authorHandle,
+      authorAvatarUrl: authorAvatarUrl,
       title: title,
       content: content,
       community: community,
@@ -163,6 +165,19 @@ class PostProvider extends ChangeNotifier {
 
     _posts.insert(0, localPost);
     notifyListeners();
+  }
+
+  void updateUserAvatar(String userId, String avatarUrl) {
+    bool updated = false;
+    for (int i = 0; i < _posts.length; i++) {
+      if (_posts[i].authorId == userId) {
+        _posts[i] = _posts[i].copyWith(authorAvatarUrl: avatarUrl);
+        updated = true;
+      }
+    }
+    if (updated) {
+      notifyListeners();
+    }
   }
 
   Future<void> updatePost({

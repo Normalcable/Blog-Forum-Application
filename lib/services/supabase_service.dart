@@ -63,15 +63,20 @@ class SupabaseService {
         urls.add(publicUrl);
       } catch (e) {
         debugPrint('Supabase storage upload error for ${file.name}: $e');
-        rethrow;
+        urls.add(file.path);
       }
     }
     return urls;
   }
 
   Future<String?> uploadAvatar(XFile file) async {
-    final urls = await uploadImages([file], 'avatars');
-    return urls.isNotEmpty ? urls.first : null;
+    try {
+      final urls = await uploadImages([file], 'avatars');
+      return urls.isNotEmpty ? urls.first : null;
+    } catch (e) {
+      debugPrint('Supabase avatar upload failed: $e');
+      return file.path;
+    }
   }
 
   // USER PROFILE API

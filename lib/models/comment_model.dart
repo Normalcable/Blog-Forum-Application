@@ -22,4 +22,26 @@ class CommentModel {
     this.likesCount = 0,
     this.isLiked = false,
   });
+
+  CommentModel copyWith({
+    String? authorName,
+    String? authorAvatarUrl,
+    String? content,
+    List<String>? imageUrls,
+    int? likesCount,
+    bool? isLiked,
+  }) {
+    return CommentModel(
+      id: id,
+      postId: postId,
+      authorId: authorId,
+      authorName: authorName ?? this.authorName,
+      authorAvatarUrl: authorAvatarUrl ?? this.authorAvatarUrl,
+      content: content ?? this.content,
+      imageUrls: imageUrls ?? this.imageUrls,
+      createdAt: createdAt,
+      likesCount: likesCount ?? this.likesCount,
+      isLiked: isLiked ?? this.isLiked,
+    );
+  }
 }

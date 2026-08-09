@@ -137,3 +137,35 @@ CREATE POLICY "Authenticated users can toggle likes." ON public.post_likes
 
 CREATE POLICY "Users can remove their own likes." ON public.post_likes
   FOR DELETE USING (auth.uid() = user_id);
+
+-- ========================================================
+-- STORAGE BUCKETS & STORAGE RLS POLICIES
+-- ========================================================
+
+-- Ensure buckets exist and are public
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('posts', 'posts', true), ('avatars', 'avatars', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- Drop previous restrictive storage policies if existing
+DROP POLICY IF EXISTS "Public Read Access for Avatars Bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Public Read Access for Posts Bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated Upload for Avatars Bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated Upload for Posts Bucket" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated Update for Avatars Bucket" ON storage.objects;
+
+-- Permissive Storage Policies
+CREATE POLICY "Public Read Access for Avatars Bucket" ON storage.objects
+  FOR SELECT USING (bucket_id = 'avatars');
+
+CREATE POLICY "Public Read Access for Posts Bucket" ON storage.objects
+  FOR SELECT USING (bucket_id = 'posts');
+
+CREATE POLICY "Upload Access for Avatars Bucket" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'avatars');
+
+CREATE POLICY "Upload Access for Posts Bucket" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'posts');
+
+CREATE POLICY "Update Access for Avatars Bucket" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'avatars');

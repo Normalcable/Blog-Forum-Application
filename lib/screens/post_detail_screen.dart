@@ -134,15 +134,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         children: [
                           Row(
                             children: [
-                              CircleAvatar(
-                                radius: 20,
-                                backgroundColor: const Color(0xFFE9E8E7),
-                                backgroundImage: post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty
-                                    ? NetworkImage(post.authorAvatarUrl!)
-                                    : null,
-                                child: post.authorAvatarUrl == null || post.authorAvatarUrl!.isEmpty
-                                    ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
-                                    : null,
+                              Builder(
+                                builder: (context) {
+                                  ImageProvider? authorAvatar;
+                                  if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
+                                    final url = post.authorAvatarUrl!;
+                                    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
+                                      authorAvatar = NetworkImage(url);
+                                    } else {
+                                      authorAvatar = FileImage(File(url)) as ImageProvider;
+                                    }
+                                  }
+                                  return CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: const Color(0xFFE9E8E7),
+                                    backgroundImage: authorAvatar,
+                                    child: authorAvatar == null
+                                        ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
+                                        : null,
+                                  );
+                                },
                               ),
                               const SizedBox(width: 12),
                               Column(
@@ -423,6 +434,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 content: text,
                                 authorId: currentUser.id,
                                 authorName: currentUser.displayName,
+                                authorAvatarUrl: currentUser.avatarUrl,
                                 imageFiles: List.from(_commentImages),
                               );
                               _commentController.clear();
@@ -476,13 +488,25 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: const Color(0xFFE9E8E7),
-          backgroundImage: avatarUrl != null && avatarUrl.isNotEmpty ? NetworkImage(avatarUrl) : null,
-          child: avatarUrl == null || avatarUrl.isEmpty
-              ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
-              : null,
+        Builder(
+          builder: (context) {
+            ImageProvider? commentAvatar;
+            if (avatarUrl != null && avatarUrl.isNotEmpty) {
+              if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('blob:') || avatarUrl.startsWith('data:') || kIsWeb) {
+                commentAvatar = NetworkImage(avatarUrl);
+              } else {
+                commentAvatar = FileImage(File(avatarUrl)) as ImageProvider;
+              }
+            }
+            return CircleAvatar(
+              radius: 20,
+              backgroundColor: const Color(0xFFE9E8E7),
+              backgroundImage: commentAvatar,
+              child: commentAvatar == null
+                  ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
+                  : null,
+            );
+          },
         ),
         const SizedBox(width: 16),
         Expanded(
