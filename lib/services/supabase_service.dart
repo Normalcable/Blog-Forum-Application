@@ -135,13 +135,10 @@ class SupabaseService {
           .order('created_at', ascending: false)
           .range(offset, offset + limit - 1);
 
-      final String? currentUserId = currentUser?.id;
-
       return (res as List).map((map) {
         final profile = map['profiles'] ?? {};
         final likes = (map['post_likes'] as List? ?? []);
-        final isLiked = currentUserId != null &&
-            likes.any((l) => l['user_id'] == currentUserId);
+        final likedUserIds = likes.map((l) => l['user_id'].toString()).toSet();
 
         return PostModel(
           id: map['id'],
@@ -155,11 +152,51 @@ class SupabaseService {
           tags: List<String>.from(map['tags'] ?? []),
           imageUrls: List<String>.from(map['image_urls'] ?? []),
           createdAt: DateTime.parse(map['created_at']),
-          likesCount: likes.length,
-          isLiked: isLiked,
+          likedUserIds: likedUserIds,
         );
       }).toList();
     } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<PostModel>> searchPosts(String query) async {
+    if (query.trim().isEmpty) return [];
+    final cleanQuery = query.trim();
+    try {
+      final res = await _client
+          .from('posts')
+          .select('''
+            *,
+            profiles!posts_author_id_fkey (display_name, username, avatar_url),
+            post_likes (user_id)
+          ''')
+          .or('title.ilike.%$cleanQuery%,content.ilike.%$cleanQuery%,community.ilike.%$cleanQuery%')
+          .order('created_at', ascending: false)
+          .limit(20);
+
+      return (res as List).map((map) {
+        final profile = map['profiles'] ?? {};
+        final likes = (map['post_likes'] as List? ?? []);
+        final likedUserIds = likes.map((l) => l['user_id'].toString()).toSet();
+
+        return PostModel(
+          id: map['id'],
+          authorId: map['author_id'],
+          authorName: profile['display_name'] ?? 'Anonymous',
+          authorHandle: '@${profile['username'] ?? 'user'}',
+          authorAvatarUrl: profile['avatar_url'],
+          title: map['title'],
+          content: map['content'],
+          community: map['community'] ?? 'general',
+          tags: List<String>.from(map['tags'] ?? []),
+          imageUrls: List<String>.from(map['image_urls'] ?? []),
+          createdAt: DateTime.parse(map['created_at']),
+          likedUserIds: likedUserIds,
+        );
+      }).toList();
+    } catch (e) {
+      debugPrint('Supabase searchPosts error: $e');
       return [];
     }
   }
@@ -199,8 +236,7 @@ class SupabaseService {
       tags: List<String>.from(res['tags'] ?? []),
       imageUrls: List<String>.from(res['image_urls'] ?? []),
       createdAt: DateTime.parse(res['created_at']),
-      likesCount: 0,
-      isLiked: false,
+      likedUserIds: {},
     );
   }
 
@@ -261,6 +297,8 @@ class SupabaseService {
           authorId: map['author_id'],
           authorName: profile['display_name'] ?? 'Anonymous',
           authorAvatarUrl: profile['avatar_url'],
+          parentId: map['parent_id'],
+          parentAuthorName: map['parent_author_name'],
           content: map['content'],
           imageUrls: List<String>.from(map['image_urls'] ?? []),
           createdAt: DateTime.parse(map['created_at']),
@@ -274,32 +312,50 @@ class SupabaseService {
   Future<CommentModel?> createComment({
     required String postId,
     required String content,
+    String? parentId,
+    String? parentAuthorName,
     List<String> imageUrls = const [],
   }) async {
     if (currentUser == null) return null;
 
-    final res = await _client.from('comments').insert({
-      'post_id': postId,
-      'author_id': currentUser!.id,
-      'content': content,
-      'image_urls': imageUrls,
-    }).select('''
-      *,
-      profiles!comments_author_id_fkey (display_name, avatar_url)
-    ''').single();
+    try {
+      final insertData = <String, dynamic>{
+        'post_id': postId,
+        'author_id': currentUser!.id,
+        'content': content,
+        'image_urls': imageUrls,
+      };
 
-    final profile = res['profiles'] ?? {};
+      if (parentId != null) {
+        insertData['parent_id'] = parentId;
+      }
+      if (parentAuthorName != null) {
+        insertData['parent_author_name'] = parentAuthorName;
+      }
 
-    return CommentModel(
-      id: res['id'],
-      postId: res['post_id'],
-      authorId: res['author_id'],
-      authorName: profile['display_name'] ?? 'Discourse User',
-      authorAvatarUrl: profile['avatar_url'],
-      content: res['content'],
-      imageUrls: List<String>.from(res['image_urls'] ?? []),
-      createdAt: DateTime.parse(res['created_at']),
-    );
+      final res = await _client.from('comments').insert(insertData).select('''
+        *,
+        profiles!comments_author_id_fkey (display_name, avatar_url)
+      ''').single();
+
+      final profile = res['profiles'] ?? {};
+
+      return CommentModel(
+        id: res['id'],
+        postId: res['post_id'],
+        authorId: res['author_id'],
+        authorName: profile['display_name'] ?? 'Discourse User',
+        authorAvatarUrl: profile['avatar_url'],
+        parentId: res['parent_id'],
+        parentAuthorName: res['parent_author_name'],
+        content: res['content'],
+        imageUrls: List<String>.from(res['image_urls'] ?? []),
+        createdAt: DateTime.parse(res['created_at']),
+      );
+    } catch (e) {
+      debugPrint('Supabase createComment error: $e');
+      return null;
+    }
   }
 
   Future<void> deleteComment(String commentId) async {

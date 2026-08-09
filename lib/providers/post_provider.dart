@@ -28,7 +28,6 @@ class PostProvider extends ChangeNotifier {
               'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop&q=80',
             ],
             createdAt: DateTime.now().subtract(const Duration(hours: 2)),
-            likesCount: 42,
           ),
           PostModel(
             id: '2',
@@ -43,7 +42,6 @@ class PostProvider extends ChangeNotifier {
               'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80',
             ],
             createdAt: DateTime.now().subtract(const Duration(hours: 5)),
-            likesCount: 18,
           ),
           PostModel(
             id: '3',
@@ -55,7 +53,6 @@ class PostProvider extends ChangeNotifier {
             community: 'tech',
             tags: ['Flutter', 'Architecture', 'StateManagement'],
             createdAt: DateTime.now().subtract(const Duration(days: 1)),
-            likesCount: 29,
           ),
         ];
 
@@ -111,6 +108,18 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
+  List<PostModel> searchPosts(String query) {
+    if (query.trim().isEmpty) return [];
+    final q = query.trim().toLowerCase();
+    return _posts.where((post) {
+      final titleMatch = post.title.toLowerCase().contains(q);
+      final contentMatch = post.content.toLowerCase().contains(q);
+      final communityMatch = post.community.toLowerCase().contains(q);
+      final tagMatch = post.tags.any((t) => t.toLowerCase().contains(q));
+      return titleMatch || contentMatch || communityMatch || tagMatch;
+    }).toList();
+  }
+
   Future<void> addPost({
     required String title,
     required String content,
@@ -160,7 +169,6 @@ class PostProvider extends ChangeNotifier {
       tags: tags,
       imageUrls: imageUrls,
       createdAt: DateTime.now(),
-      likesCount: 0,
     );
 
     _posts.insert(0, localPost);
@@ -237,13 +245,18 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleLike(String id) async {
+  Future<void> toggleLike(String id, String currentUserId) async {
     final index = _posts.indexWhere((p) => p.id == id);
     if (index != -1) {
       final post = _posts[index];
-      final wasLiked = post.isLiked;
-      post.isLiked = !wasLiked;
-      post.likesCount += post.isLiked ? 1 : -1;
+      final wasLiked = post.likedUserIds.contains(currentUserId);
+      final newLikedUserIds = Set<String>.from(post.likedUserIds);
+      if (wasLiked) {
+        newLikedUserIds.remove(currentUserId);
+      } else {
+        newLikedUserIds.add(currentUserId);
+      }
+      _posts[index] = post.copyWith(likedUserIds: newLikedUserIds);
       notifyListeners();
 
       if (SupabaseConfig.isConfigured) {

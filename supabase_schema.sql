@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS public.comments (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   post_id UUID REFERENCES public.posts(id) ON DELETE CASCADE NOT NULL,
   author_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  parent_id UUID REFERENCES public.comments(id) ON DELETE CASCADE,
+  parent_author_name TEXT,
   content TEXT NOT NULL,
   image_urls TEXT[] DEFAULT '{}'::TEXT[],
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL

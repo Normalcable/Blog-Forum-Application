@@ -4,11 +4,12 @@ class CommentModel {
   final String authorId;
   final String authorName;
   final String? authorAvatarUrl;
+  final String? parentId;
+  final String? parentAuthorName;
   final String content;
   final List<String> imageUrls;
   final DateTime createdAt;
-  int likesCount;
-  bool isLiked;
+  final Set<String> likedUserIds;
 
   CommentModel({
     required this.id,
@@ -16,20 +17,29 @@ class CommentModel {
     required this.authorId,
     required this.authorName,
     this.authorAvatarUrl,
+    this.parentId,
+    this.parentAuthorName,
     required this.content,
     this.imageUrls = const [],
     required this.createdAt,
-    this.likesCount = 0,
-    this.isLiked = false,
-  });
+    Set<String>? likedUserIds,
+  }) : likedUserIds = likedUserIds ?? {};
+
+  int get likesCount => likedUserIds.length;
+
+  bool isLikedForUser(String? userId) {
+    if (userId == null || userId.isEmpty) return false;
+    return likedUserIds.contains(userId);
+  }
 
   CommentModel copyWith({
     String? authorName,
     String? authorAvatarUrl,
+    String? parentId,
+    String? parentAuthorName,
     String? content,
     List<String>? imageUrls,
-    int? likesCount,
-    bool? isLiked,
+    Set<String>? likedUserIds,
   }) {
     return CommentModel(
       id: id,
@@ -37,11 +47,12 @@ class CommentModel {
       authorId: authorId,
       authorName: authorName ?? this.authorName,
       authorAvatarUrl: authorAvatarUrl ?? this.authorAvatarUrl,
+      parentId: parentId ?? this.parentId,
+      parentAuthorName: parentAuthorName ?? this.parentAuthorName,
       content: content ?? this.content,
       imageUrls: imageUrls ?? this.imageUrls,
       createdAt: createdAt,
-      likesCount: likesCount ?? this.likesCount,
-      isLiked: isLiked ?? this.isLiked,
+      likedUserIds: likedUserIds ?? Set.from(this.likedUserIds),
     );
   }
 }

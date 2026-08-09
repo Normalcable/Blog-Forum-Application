@@ -10,8 +10,7 @@ class PostModel {
   final List<String> tags;
   final List<String> imageUrls;
   final DateTime createdAt;
-  int likesCount;
-  bool isLiked;
+  final Set<String> likedUserIds;
 
   PostModel({
     required this.id,
@@ -25,9 +24,15 @@ class PostModel {
     required this.tags,
     this.imageUrls = const [],
     required this.createdAt,
-    this.likesCount = 0,
-    this.isLiked = false,
-  });
+    Set<String>? likedUserIds,
+  }) : likedUserIds = likedUserIds ?? {};
+
+  int get likesCount => likedUserIds.length;
+
+  bool isLikedForUser(String? userId) {
+    if (userId == null || userId.isEmpty) return false;
+    return likedUserIds.contains(userId);
+  }
 
   PostModel copyWith({
     String? title,
@@ -36,8 +41,7 @@ class PostModel {
     List<String>? tags,
     List<String>? imageUrls,
     String? authorAvatarUrl,
-    int? likesCount,
-    bool? isLiked,
+    Set<String>? likedUserIds,
   }) {
     return PostModel(
       id: id,
@@ -51,8 +55,7 @@ class PostModel {
       tags: tags ?? this.tags,
       imageUrls: imageUrls ?? this.imageUrls,
       createdAt: createdAt,
-      likesCount: likesCount ?? this.likesCount,
-      isLiked: isLiked ?? this.isLiked,
+      likedUserIds: likedUserIds ?? Set.from(this.likedUserIds),
     );
   }
 }

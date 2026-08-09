@@ -18,7 +18,6 @@ class CommentProvider extends ChangeNotifier {
               authorName: 'David Chen',
               content: "Brilliant take on the library analogy. I think the challenge is convincing stakeholders that 'quiet' interfaces don't mean 'dead' interfaces. Engagement metrics often punish subtlety.",
               createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-              likesCount: 12,
             ),
             CommentModel(
               id: 'c2',
@@ -27,7 +26,6 @@ class CommentProvider extends ChangeNotifier {
               authorName: 'Elena Rostova',
               content: "Exactly this! We need better metrics for 'quality of time spent' rather than just 'duration'.",
               createdAt: DateTime.now().subtract(const Duration(minutes: 45)),
-              likesCount: 3,
             ),
           ],
         };
@@ -57,6 +55,8 @@ class CommentProvider extends ChangeNotifier {
     required String authorId,
     required String authorName,
     String? authorAvatarUrl,
+    String? parentId,
+    String? parentAuthorName,
     List<XFile> imageFiles = const [],
   }) async {
     List<String> imageUrls = [];
@@ -73,6 +73,8 @@ class CommentProvider extends ChangeNotifier {
       final newComment = await _supabaseService.createComment(
         postId: postId,
         content: content,
+        parentId: parentId,
+        parentAuthorName: parentAuthorName,
         imageUrls: imageUrls,
       );
       if (newComment != null) {
@@ -91,10 +93,11 @@ class CommentProvider extends ChangeNotifier {
       authorId: authorId,
       authorName: authorName,
       authorAvatarUrl: authorAvatarUrl,
+      parentId: parentId,
+      parentAuthorName: parentAuthorName,
       content: content,
       imageUrls: imageUrls,
       createdAt: DateTime.now(),
-      likesCount: 0,
     );
 
     if (!_commentsByPostId.containsKey(postId)) {
@@ -119,13 +122,19 @@ class CommentProvider extends ChangeNotifier {
     }
   }
 
-  void toggleLikeComment(String commentId) {
+  void toggleLikeComment(String commentId, String currentUserId) {
     for (var list in _commentsByPostId.values) {
       final index = list.indexWhere((c) => c.id == commentId);
       if (index != -1) {
         final comment = list[index];
-        comment.isLiked = !comment.isLiked;
-        comment.likesCount += comment.isLiked ? 1 : -1;
+        final wasLiked = comment.likedUserIds.contains(currentUserId);
+        final newLikedUserIds = Set<String>.from(comment.likedUserIds);
+        if (wasLiked) {
+          newLikedUserIds.remove(currentUserId);
+        } else {
+          newLikedUserIds.add(currentUserId);
+        }
+        list[index] = comment.copyWith(likedUserIds: newLikedUserIds);
         notifyListeners();
         break;
       }

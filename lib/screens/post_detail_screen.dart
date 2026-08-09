@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/post_provider.dart';
 import '../providers/comment_provider.dart';
+import '../models/comment_model.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final String postId;
@@ -21,7 +22,9 @@ class PostDetailScreen extends StatefulWidget {
 
 class _PostDetailScreenState extends State<PostDetailScreen> {
   final _commentController = TextEditingController();
+  final _commentFocusNode = FocusNode();
   final List<XFile> _commentImages = [];
+  CommentModel? _replyingToComment;
 
   Future<void> _pickCommentImages() async {
     final picker = ImagePicker();
@@ -36,6 +39,19 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   void _removeCommentImage(int index) {
     setState(() {
       _commentImages.removeAt(index);
+    });
+  }
+
+  void _onReplyToComment(CommentModel comment) {
+    setState(() {
+      _replyingToComment = comment;
+    });
+    _commentFocusNode.requestFocus();
+  }
+
+  void _cancelReply() {
+    setState(() {
+      _replyingToComment = null;
     });
   }
 
@@ -300,24 +316,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   )
                 else
-                  ...comments.map((comment) {
-                    final isCommentAuthor = comment.authorId == currentUser.id;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: _buildComment(
-                        author: comment.authorName,
-                        avatarUrl: comment.authorAvatarUrl,
-                        time: 'Just now',
-                        content: comment.content,
-                        imageUrls: comment.imageUrls,
-                        likes: '${comment.likesCount}',
-                        isLiked: comment.isLiked,
-                        isOwner: isCommentAuthor,
-                        onLikeToggle: () => commentProvider.toggleLikeComment(comment.id),
-                        onDelete: () => commentProvider.deleteComment(post.id, comment.id),
-                      ),
-                    );
-                  }),
+                  ..._buildThreadedComments(comments, currentUser.id, commentProvider, post.id),
               ],
             ),
           ),
@@ -378,6 +377,37 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         },
                       ),
                     ),
+                  if (_replyingToComment != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F3F3),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: const Color(0xFFE4E2E2)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.reply, size: 16, color: Color(0xFF775A19)),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              'Replying to @${_replyingToComment!.authorName}',
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF775A19),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: _cancelReply,
+                            child: const Icon(Icons.close, size: 16, color: Color(0xFF444748)),
+                          ),
+                        ],
+                      ),
+                    ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
@@ -406,10 +436,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         Expanded(
                           child: TextField(
                             controller: _commentController,
+                            focusNode: _commentFocusNode,
                             maxLines: 4,
                             minLines: 1,
                             decoration: InputDecoration(
-                              hintText: 'Add a response...',
+                              hintText: _replyingToComment != null
+                                  ? 'Write a reply to @${_replyingToComment!.authorName}...'
+                                  : 'Add a response...',
                               hintStyle: GoogleFonts.hankenGrotesk(
                                 color: const Color(0xFF444748),
                                 fontSize: 16,
@@ -435,11 +468,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 authorId: currentUser.id,
                                 authorName: currentUser.displayName,
                                 authorAvatarUrl: currentUser.avatarUrl,
+                                parentId: _replyingToComment?.id,
+                                parentAuthorName: _replyingToComment?.authorName,
                                 imageFiles: List.from(_commentImages),
                               );
                               _commentController.clear();
                               setState(() {
                                 _commentImages.clear();
+                                _replyingToComment = null;
                               });
                             }
                           },
@@ -474,8 +510,10 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   }
 
   Widget _buildComment({
+    required CommentModel comment,
     required String author,
     String? avatarUrl,
+    String? parentAuthorName,
     required String time,
     required String content,
     required List<String> imageUrls,
@@ -484,6 +522,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     required bool isOwner,
     required VoidCallback onLikeToggle,
     required VoidCallback onDelete,
+    required VoidCallback onReply,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -530,25 +569,41 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Text(
-                          author,
-                          style: GoogleFonts.hankenGrotesk(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                    Expanded(
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            author,
+                            style: GoogleFonts.hankenGrotesk(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          time,
-                          style: GoogleFonts.hankenGrotesk(
-                            fontSize: 12,
-                            color: const Color(0xFF444748),
+                          if (parentAuthorName != null && parentAuthorName.isNotEmpty) ...[
+                            const SizedBox(width: 4),
+                            const Icon(Icons.play_arrow, size: 12, color: Color(0xFF775A19)),
+                            const SizedBox(width: 4),
+                            Text(
+                              parentAuthorName,
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF775A19),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(width: 8),
+                          Text(
+                            time,
+                            style: GoogleFonts.hankenGrotesk(
+                              fontSize: 12,
+                              color: const Color(0xFF444748),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     if (isOwner)
                       GestureDetector(
@@ -614,18 +669,22 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.reply, size: 18, color: Color(0xFF444748)),
-                        const SizedBox(width: 4),
-                        Text(
-                          'Reply',
-                          style: GoogleFonts.hankenGrotesk(
-                            fontSize: 14,
-                            color: const Color(0xFF444748),
+                    GestureDetector(
+                      onTap: onReply,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.reply, size: 18, color: Color(0xFF444748)),
+                          const SizedBox(width: 4),
+                          Text(
+                            'Reply',
+                            style: GoogleFonts.hankenGrotesk(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF444748),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -637,9 +696,75 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     );
   }
 
+  List<Widget> _buildThreadedComments(
+    List<CommentModel> comments,
+    String currentUserId,
+    CommentProvider commentProvider,
+    String postId,
+  ) {
+    final rootComments = comments.where((c) => c.parentId == null || c.parentId!.isEmpty).toList();
+
+    final Map<String, List<CommentModel>> replyMap = {};
+    for (final c in comments) {
+      if (c.parentId != null && c.parentId!.isNotEmpty) {
+        replyMap.putIfAbsent(c.parentId!, () => []).add(c);
+      }
+    }
+
+    List<Widget> widgets = [];
+    final Set<String> renderedCommentIds = {};
+
+    void renderCommentAndChildren(CommentModel comment, double indentLevel) {
+      if (renderedCommentIds.contains(comment.id)) return;
+      renderedCommentIds.add(comment.id);
+
+      final isOwner = comment.authorId == currentUserId;
+      final isLiked = comment.isLikedForUser(currentUserId);
+      widgets.add(
+        Padding(
+          padding: EdgeInsets.only(left: indentLevel, bottom: 12.0),
+          child: _buildComment(
+            comment: comment,
+            author: comment.authorName,
+            avatarUrl: comment.authorAvatarUrl,
+            parentAuthorName: comment.parentAuthorName,
+            time: 'Just now',
+            content: comment.content,
+            imageUrls: comment.imageUrls,
+            likes: '${comment.likesCount}',
+            isLiked: isLiked,
+            isOwner: isOwner,
+            onLikeToggle: () => commentProvider.toggleLikeComment(comment.id, currentUserId),
+            onDelete: () => commentProvider.deleteComment(postId, comment.id),
+            onReply: () => _onReplyToComment(comment),
+          ),
+        ),
+      );
+
+      final children = replyMap[comment.id] ?? [];
+      for (final child in children) {
+        renderCommentAndChildren(child, (indentLevel + 24.0).clamp(0.0, 48.0));
+      }
+    }
+
+    for (final root in rootComments) {
+      renderCommentAndChildren(root, 0.0);
+    }
+
+    // Render any orphan replies (replies whose parent comment was deleted or not in list)
+    for (final c in comments) {
+      if (!renderedCommentIds.contains(c.id)) {
+        renderCommentAndChildren(c, 24.0);
+      }
+    }
+
+    return widgets;
+  }
+
   @override
   void dispose() {
     _commentController.dispose();
+    _commentFocusNode.dispose();
     super.dispose();
   }
 }
