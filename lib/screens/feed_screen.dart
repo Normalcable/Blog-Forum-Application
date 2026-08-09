@@ -208,58 +208,31 @@ class _FeedScreenState extends State<FeedScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Media Multi-Image Preview Carousel / Grid
-            if (post.imageUrls.isNotEmpty)
-              Container(
-                height: 200,
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 12),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: post.imageUrls.length,
-                  itemBuilder: (context, idx) {
-                    final url = post.imageUrls[idx];
-                    final isNetworkOrWeb = kIsWeb ||
-                        url.startsWith('http://') ||
-                        url.startsWith('https://') ||
-                        url.startsWith('blob:') ||
-                        url.startsWith('data:');
-
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: isNetworkOrWeb
-                            ? Image.network(
-                                url,
-                                width: post.imageUrls.length == 1 ? 360 : 240,
-                                height: 200,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Container(
-                                  width: 240,
-                                  height: 200,
-                                  color: const Color(0xFFE9E8E7),
-                                  child: const Icon(Icons.broken_image, size: 48, color: Color(0xFFC4C7C7)),
-                                ),
-                              )
-                            : Image.file(
-                                File(url),
-                                width: post.imageUrls.length == 1 ? 360 : 240,
-                                height: 200,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) => Container(
-                                  width: 240,
-                                  height: 200,
-                                  color: const Color(0xFFE9E8E7),
-                                  child: const Icon(Icons.broken_image, size: 48, color: Color(0xFFC4C7C7)),
-                                ),
-                              ),
-                      ),
-                    );
-                  },
-                ),
+            // Title
+            Text(
+              post.title,
+              style: GoogleFonts.libreCaslonText(
+                fontSize: 32,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+                letterSpacing: -0.32,
               ),
+            ),
             const SizedBox(height: 12),
+            // Body Content
+            Text(
+              post.content,
+              style: GoogleFonts.hankenGrotesk(
+                fontSize: 16,
+                color: const Color(0xFF444748),
+              ),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 16),
+            // Adaptive Media Grid (Twitter/Facebook style)
+            _buildAdaptiveMediaGrid(context, post.imageUrls),
+            // Tags
             // Tags
             if (post.tags.isNotEmpty)
               Row(
@@ -282,26 +255,6 @@ class _FeedScreenState extends State<FeedScreen> {
                   ),
                 )).toList(),
               ),
-            const SizedBox(height: 12),
-            Text(
-              post.title,
-              style: GoogleFonts.libreCaslonText(
-                fontSize: 32,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
-                letterSpacing: -0.32,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              post.content,
-              style: GoogleFonts.hankenGrotesk(
-                fontSize: 16,
-                color: const Color(0xFF444748),
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-            ),
             const SizedBox(height: 24),
             const Divider(color: Color(0x7FE4E2E2)),
             const SizedBox(height: 12),
@@ -386,6 +339,161 @@ class _FeedScreenState extends State<FeedScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAdaptiveMediaGrid(BuildContext context, List<String> imageUrls) {
+    if (imageUrls.isEmpty) return const SizedBox.shrink();
+
+    Widget buildSingleImage(String url, {double? width, double height = 200, Widget? overlay}) {
+      final isNetworkOrWeb = kIsWeb ||
+          url.startsWith('http://') ||
+          url.startsWith('https://') ||
+          url.startsWith('blob:') ||
+          url.startsWith('data:');
+
+      Widget imageWidget = isNetworkOrWeb
+          ? Image.network(
+              url,
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: width,
+                height: height,
+                color: const Color(0xFFE9E8E7),
+                child: const Icon(Icons.broken_image, size: 36, color: Color(0xFFC4C7C7)),
+              ),
+            )
+          : Image.file(
+              File(url),
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                width: width,
+                height: height,
+                color: const Color(0xFFE9E8E7),
+                child: const Icon(Icons.broken_image, size: 36, color: Color(0xFFC4C7C7)),
+              ),
+            );
+
+      if (overlay != null) {
+        imageWidget = Stack(
+          children: [
+            Positioned.fill(child: imageWidget),
+            Positioned.fill(child: overlay),
+          ],
+        );
+      }
+
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: imageWidget,
+      );
+    }
+
+    final count = imageUrls.length;
+
+    if (count == 1) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        width: double.infinity,
+        child: buildSingleImage(imageUrls[0], width: double.infinity, height: 220),
+      );
+    }
+
+    if (count == 2) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        height: 180,
+        child: Row(
+          children: [
+            Expanded(child: buildSingleImage(imageUrls[0], height: 180)),
+            const SizedBox(width: 4),
+            Expanded(child: buildSingleImage(imageUrls[1], height: 180)),
+          ],
+        ),
+      );
+    }
+
+    if (count == 3) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        height: 200,
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: buildSingleImage(imageUrls[0], height: 200),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  Expanded(child: buildSingleImage(imageUrls[1], height: double.infinity)),
+                  const SizedBox(height: 4),
+                  Expanded(child: buildSingleImage(imageUrls[2], height: double.infinity)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // 4 or more images (2x2 grid with +N badge for extra images)
+    final remaining = count - 4;
+    Widget? fourthOverlay;
+    if (remaining > 0) {
+      fourthOverlay = Container(
+        color: Colors.black54,
+        child: Center(
+          child: Text(
+            '+$remaining',
+            style: GoogleFonts.hankenGrotesk(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      height: 220,
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(child: buildSingleImage(imageUrls[0], height: double.infinity)),
+                const SizedBox(width: 4),
+                Expanded(child: buildSingleImage(imageUrls[1], height: double.infinity)),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(child: buildSingleImage(imageUrls[2], height: double.infinity)),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: buildSingleImage(
+                    imageUrls[3],
+                    height: double.infinity,
+                    overlay: fourthOverlay,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -195,8 +195,17 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           letterSpacing: -0.32,
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      Text(
+                        post.content,
+                        style: GoogleFonts.hankenGrotesk(
+                          fontSize: 16,
+                          color: Colors.black,
+                          height: 1.6,
+                        ),
+                      ),
                       const SizedBox(height: 24),
-                      // Multi-Image Viewer
+                      // Multi-Image Viewer (Below text)
                       if (post.imageUrls.isNotEmpty)
                         Column(
                           children: post.imageUrls.map((url) {
@@ -237,15 +246,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             );
                           }).toList(),
                         ),
-                      const SizedBox(height: 24),
-                      Text(
-                        post.content,
-                        style: GoogleFonts.hankenGrotesk(
-                          fontSize: 16,
-                          color: Colors.black,
-                          height: 1.6,
-                        ),
-                      ),
                       const SizedBox(height: 32),
                       if (post.tags.isNotEmpty)
                         Row(

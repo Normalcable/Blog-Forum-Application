@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/post_model.dart';
@@ -48,19 +49,21 @@ class SupabaseService {
     for (final file in files) {
       try {
         final bytes = await file.readAsBytes();
-        final extension = file.name.split('.').last;
-        final fileName = '${userId}_${DateTime.now().millisecondsSinceEpoch}_${urls.length}.$extension';
+        final rawExt = file.name.contains('.') ? file.name.split('.').last.toLowerCase() : 'png';
+        final mimeType = rawExt == 'jpg' ? 'jpeg' : rawExt;
+        final fileName = '${userId}_${DateTime.now().millisecondsSinceEpoch}_${urls.length}.$rawExt';
 
         await _client.storage.from(bucket).uploadBinary(
               fileName,
               bytes,
-              fileOptions: FileOptions(contentType: 'image/$extension'),
+              fileOptions: FileOptions(contentType: 'image/$mimeType'),
             );
 
         final publicUrl = _client.storage.from(bucket).getPublicUrl(fileName);
         urls.add(publicUrl);
       } catch (e) {
-        // Skip failed individual upload
+        debugPrint('Supabase storage upload error for ${file.name}: $e');
+        rethrow;
       }
     }
     return urls;

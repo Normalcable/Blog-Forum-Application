@@ -125,34 +125,25 @@ class PostProvider extends ChangeNotifier {
 
     if (imageFiles.isNotEmpty) {
       if (SupabaseConfig.isConfigured) {
-        try {
-          imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts').timeout(const Duration(seconds: 15));
-        } catch (e) {
-          debugPrint('Supabase image upload failed/timed out, using local image paths: $e');
-          imageUrls = imageFiles.map((f) => f.path).toList();
-        }
+        imageUrls = await _supabaseService.uploadImages(imageFiles, 'posts').timeout(const Duration(seconds: 15));
       } else {
         imageUrls = imageFiles.map((f) => f.path).toList();
       }
     }
 
     if (SupabaseConfig.isConfigured) {
-      try {
-        final newPost = await _supabaseService.createPost(
-          title: title,
-          content: content,
-          community: community,
-          tags: tags,
-          imageUrls: imageUrls,
-        ).timeout(const Duration(seconds: 10));
+      final newPost = await _supabaseService.createPost(
+        title: title,
+        content: content,
+        community: community,
+        tags: tags,
+        imageUrls: imageUrls,
+      ).timeout(const Duration(seconds: 10));
 
-        if (newPost != null) {
-          _posts.insert(0, newPost);
-          notifyListeners();
-          return;
-        }
-      } catch (e) {
-        debugPrint('Supabase post creation failed/timed out, adding post locally: $e');
+      if (newPost != null) {
+        _posts.insert(0, newPost);
+        notifyListeners();
+        return;
       }
     }
 
@@ -189,13 +180,8 @@ class PostProvider extends ChangeNotifier {
 
       if (newImageFiles.isNotEmpty) {
         if (SupabaseConfig.isConfigured) {
-          try {
-            final uploaded = await _supabaseService.uploadImages(newImageFiles, 'posts').timeout(const Duration(seconds: 15));
-            finalUrls.addAll(uploaded);
-          } catch (e) {
-            debugPrint('Supabase image upload failed, keeping local paths: $e');
-            finalUrls.addAll(newImageFiles.map((f) => f.path));
-          }
+          final uploaded = await _supabaseService.uploadImages(newImageFiles, 'posts').timeout(const Duration(seconds: 15));
+          finalUrls.addAll(uploaded);
         } else {
           finalUrls.addAll(newImageFiles.map((f) => f.path));
         }
