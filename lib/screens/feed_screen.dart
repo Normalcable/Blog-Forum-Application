@@ -19,11 +19,23 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Provider.of<PostProvider>(context, listen: false).fetchPosts(refresh: true);
+      }
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 3) {
+    if (index == 1) {
+      context.push('/search');
+    } else if (index == 3) {
       context.push('/profile');
     }
   }
@@ -67,6 +79,10 @@ class _FeedScreenState extends State<FeedScreen> {
         ),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Color(0xFF444748)),
+            onPressed: () => context.push('/search'),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: GestureDetector(
@@ -136,8 +152,9 @@ class _FeedScreenState extends State<FeedScreen> {
                   child: _buildPostCard(
                     context: context,
                     post: post,
+                    currentUserId: authProvider.currentUser.id,
                     commentCount: commentCount,
-                    onLikeToggle: () => postProvider.toggleLike(post.id),
+                    onLikeToggle: () => postProvider.toggleLike(post.id, authProvider.currentUser.id),
                   ),
                 );
               },
@@ -185,9 +202,11 @@ class _FeedScreenState extends State<FeedScreen> {
   Widget _buildPostCard({
     required BuildContext context,
     required PostModel post,
+    required String currentUserId,
     required int commentCount,
     required VoidCallback onLikeToggle,
   }) {
+    final isLiked = post.isLikedForUser(currentUserId);
     return GestureDetector(
       onTap: () => context.push('/post/${post.id}'),
       child: Container(
@@ -219,11 +238,12 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            // Body Content
+            // Body Content Preview
             Text(
               post.content,
               style: GoogleFonts.hankenGrotesk(
                 fontSize: 16,
+                height: 1.5,
                 color: const Color(0xFF444748),
               ),
               maxLines: 3,
@@ -232,7 +252,6 @@ class _FeedScreenState extends State<FeedScreen> {
             const SizedBox(height: 16),
             // Adaptive Media Grid (Twitter/Facebook style)
             _buildAdaptiveMediaGrid(context, post.imageUrls),
-            // Tags
             // Tags
             if (post.tags.isNotEmpty)
               Row(
@@ -302,9 +321,9 @@ class _FeedScreenState extends State<FeedScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            post.isLiked ? Icons.favorite : Icons.favorite_border,
+                            isLiked ? Icons.favorite : Icons.favorite_border,
                             size: 18,
-                            color: post.isLiked ? const Color(0xFFBA1A1A) : const Color(0xFF444748),
+                            color: isLiked ? const Color(0xFFBA1A1A) : const Color(0xFF444748),
                           ),
                           const SizedBox(width: 4),
                           Text(
