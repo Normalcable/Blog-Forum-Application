@@ -1,6 +1,5 @@
 -- ========================================================
 -- DISCOURSE BLOG FORUM - SUPABASE DATABASE SCHEMA & RLS
--- Copy and paste this script into your Supabase SQL Editor.
 -- ========================================================
 
 -- 1. Create PROFILES Table

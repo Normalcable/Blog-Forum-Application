@@ -100,7 +100,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Saving post failed: ${e.toString()}')),
+          SnackBar(content: Text('Failed to update post: ${e.toString()}')),
         );
       }
     } finally {
@@ -167,43 +167,6 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        decoration: const BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Color(0xFFE9E8E7))),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.group_outlined, color: Color(0xFF747878)),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _selectedCommunity,
-                                  isDense: true,
-                                  icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF444748)),
-                                  style: GoogleFonts.hankenGrotesk(
-                                    fontSize: 14,
-                                    color: const Color(0xFF444748),
-                                  ),
-                                  onChanged: (String? newValue) {
-                                    if (newValue != null) {
-                                      setState(() => _selectedCommunity = newValue);
-                                    }
-                                  },
-                                  items: const [
-                                    DropdownMenuItem(value: 'general', child: Text('Select Community...')),
-                                    DropdownMenuItem(value: 'design', child: Text('Design Systems')),
-                                    DropdownMenuItem(value: 'tech', child: Text('Tech & Architecture')),
-                                    DropdownMenuItem(value: 'philosophy', child: Text('Philosophy')),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
                       TextField(
                         controller: _titleController,
                         style: GoogleFonts.libreCaslonText(
@@ -220,7 +183,34 @@ class _EditPostScreenState extends State<EditPostScreen> {
                           contentPadding: EdgeInsets.zero,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(Icons.numbers, size: 18, color: Color(0xFF775A19)),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: TextField(
+                              controller: _tagsController,
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 14,
+                                color: const Color(0xFF775A19),
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Add tags (comma separated, e.g. Design, Flutter)',
+                                hintStyle: GoogleFonts.hankenGrotesk(
+                                  fontSize: 14,
+                                  color: const Color(0xFFC4C7C7),
+                                ),
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 24, color: Color(0xFFF5F3F3)),
                       TextField(
                         controller: _contentController,
                         maxLines: 10,
@@ -243,7 +233,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                // Media Management Card
+                // Media / Attachments Card
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -265,13 +255,19 @@ class _EditPostScreenState extends State<EditPostScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Post Media (${_existingImageUrls.length + _newImageFiles.length})',
-                            style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF444748),
-                            ),
+                          Row(
+                            children: [
+                              const Icon(Icons.image, color: Color(0xFF444748), size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Attached Media (${_existingImageUrls.length + _newImageFiles.length})',
+                                style: GoogleFonts.hankenGrotesk(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF444748),
+                                ),
+                              ),
+                            ],
                           ),
                           IconButton(
                             icon: const Icon(Icons.add_circle_outline, color: Color(0xFF775A19)),
@@ -301,24 +297,31 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                   children: [
                                     Icon(Icons.add_photo_alternate, color: Color(0xFF444748)),
                                     SizedBox(height: 4),
-                                    Text('Add', style: TextStyle(fontSize: 10, color: Color(0xFF444748))),
+                                    Text('Add Images', style: TextStyle(fontSize: 10, color: Color(0xFF444748))),
                                   ],
                                 ),
                               ),
                             ),
                             const SizedBox(width: 12),
+
+                            // Existing Cloud Images
                             ...List.generate(_existingImageUrls.length, (index) {
+                              final url = _existingImageUrls[index];
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12.0),
                                 child: Stack(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        _existingImageUrls[index],
-                                        width: 96,
-                                        height: 96,
-                                        fit: BoxFit.cover,
+                                    Container(
+                                      width: 96,
+                                      height: 96,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                          image: (url.startsWith('http') || url.startsWith('blob:') || kIsWeb)
+                                              ? NetworkImage(url)
+                                              : FileImage(File(url)) as ImageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     Positioned(
@@ -340,21 +343,25 @@ class _EditPostScreenState extends State<EditPostScreen> {
                                 ),
                               );
                             }),
+
+                            // Newly Selected Files
                             ...List.generate(_newImageFiles.length, (index) {
                               final file = _newImageFiles[index];
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12.0),
                                 child: Stack(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image(
-                                        image: kIsWeb
-                                            ? NetworkImage(file.path)
-                                            : FileImage(File(file.path)) as ImageProvider,
-                                        width: 96,
-                                        height: 96,
-                                        fit: BoxFit.cover,
+                                    Container(
+                                      width: 96,
+                                      height: 96,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                          image: kIsWeb
+                                              ? NetworkImage(file.path)
+                                              : FileImage(File(file.path)) as ImageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                     Positioned(
@@ -382,58 +389,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Tags
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE4E2E2)),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0C000000),
-                        offset: Offset(0, 4),
-                        blurRadius: 6,
-                        spreadRadius: -1,
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.format_bold, color: Color(0xFF444748)),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.format_italic, color: Color(0xFF444748)),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.link, color: Color(0xFF444748)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.tag, size: 18, color: Color(0xFF747878)),
-                          const SizedBox(width: 8),
-                          SizedBox(
-                            width: 120,
-                            child: TextField(
-                              controller: _tagsController,
-                              style: GoogleFonts.hankenGrotesk(fontSize: 12),
-                              decoration: InputDecoration(
-                                hintText: 'Tag1, Tag2...',
-                                hintStyle: GoogleFonts.hankenGrotesk(fontSize: 12, color: const Color(0xFFC4C7C7)),
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -460,7 +416,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.save, size: 20),
+                          const Icon(Icons.check, size: 20),
                           const SizedBox(width: 12),
                           Text(
                             'Save Changes',

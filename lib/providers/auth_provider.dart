@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../config/supabase_config.dart';
 import '../models/user_model.dart';
 import '../services/supabase_service.dart';
@@ -61,7 +62,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = _parseAuthError(e);
       _isLoading = false;
       notifyListeners();
       return false;
@@ -92,11 +93,35 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = _parseAuthError(e);
       _isLoading = false;
       notifyListeners();
       return false;
     }
+  }
+
+  String _parseAuthError(dynamic e) {
+    if (e is AuthException) {
+      final msg = e.message.toLowerCase();
+      if (msg.contains('invalid login credentials') || msg.contains('invalid_credentials')) {
+        return 'Incorrect email or password. Please try again.';
+      }
+      if (msg.contains('user already registered') || msg.contains('already exists') || msg.contains('user_already_exists')) {
+        return 'An account with this email address already exists.';
+      }
+      if (msg.contains('email not confirmed')) {
+        return 'Please check your inbox to confirm your email before logging in.';
+      }
+      if (msg.contains('password should be at least')) {
+        return 'Password must be at least 6 characters long.';
+      }
+      return e.message;
+    }
+    final raw = e.toString().toLowerCase();
+    if (raw.contains('socketexception') || raw.contains('network') || raw.contains('failed host lookup')) {
+      return 'Network error. Please check your internet connection and try again.';
+    }
+    return 'An unexpected error occurred. Please try again.';
   }
 
   Future<void> updateProfile({

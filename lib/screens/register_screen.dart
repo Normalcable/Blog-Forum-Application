@@ -15,7 +15,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _nameFocusNode = FocusNode();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameFocusNode.addListener(_onFocusChange);
+    _emailFocusNode.addListener(_onFocusChange);
+    _passwordFocusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {});
+  }
 
   void _register() async {
     final name = _nameController.text.trim();
@@ -133,8 +148,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _nameController,
+                        focusNode: _nameFocusNode,
                         decoration: InputDecoration(
-                          hintText: 'Sarah Jenkins',
+                          hintText: _nameFocusNode.hasFocus ? null : 'Sarah Jenkins',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),
                           prefixIcon: const Icon(Icons.person, color: Color(0xFF444748)),
                           filled: true,
@@ -162,9 +178,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'you@example.com',
+                          hintText: _emailFocusNode.hasFocus ? null : 'you@example.com',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),
                           prefixIcon: const Icon(Icons.mail, color: Color(0xFF444748)),
                           filled: true,
@@ -192,9 +209,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _passwordController,
+                        focusNode: _passwordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
-                          hintText: '••••••••',
+                          hintText: _passwordFocusNode.hasFocus ? null : '••••••••',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),
                           prefixIcon: const Icon(Icons.lock, color: Color(0xFF444748)),
                           filled: true,
@@ -276,6 +294,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    _nameFocusNode.removeListener(_onFocusChange);
+    _emailFocusNode.removeListener(_onFocusChange);
+    _passwordFocusNode.removeListener(_onFocusChange);
+    _nameFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();

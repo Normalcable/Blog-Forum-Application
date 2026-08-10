@@ -14,7 +14,20 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocusNode.addListener(_onFocusChange);
+    _passwordFocusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {});
+  }
 
   void _login() async {
     final email = _emailController.text.trim();
@@ -49,18 +62,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBF9F8), // bg-background
+      backgroundColor: const Color(0xFFFBF9F8),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(32.0), // p-gutter
+          padding: const EdgeInsets.all(32.0),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 448), // max-w-md
+            constraints: const BoxConstraints(maxWidth: 448),
             child: Container(
               padding: const EdgeInsets.all(32.0),
               decoration: BoxDecoration(
-                color: Colors.white, // surface-container-lowest
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE4E2E2)), // surface-variant
+                border: Border.all(color: const Color(0xFFE4E2E2)),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x0C000000),
@@ -79,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.libreCaslonText(
                       fontSize: 48,
                       fontWeight: FontWeight.w400,
-                      color: Colors.black, // text-primary
+                      color: Colors.black,
                       letterSpacing: -0.96,
                     ),
                   ),
@@ -88,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Welcome back. Join the conversation.',
                     style: GoogleFonts.hankenGrotesk(
                       fontSize: 16,
-                      color: const Color(0xFF444748), // text-on-surface-variant
+                      color: const Color(0xFF444748),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -108,13 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _emailController,
+                        focusNode: _emailFocusNode,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'name@example.com',
+                          hintText: _emailFocusNode.hasFocus ? null : 'name@example.com',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),
                           prefixIcon: const Icon(Icons.mail, color: Color(0xFF444748)),
                           filled: true,
-                          fillColor: const Color(0xFFF5F3F3), // bg-surface-container-low
+                          fillColor: const Color(0xFFF5F3F3),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide.none,
@@ -143,9 +157,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _passwordController,
+                        focusNode: _passwordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
-                          hintText: '••••••••',
+                          hintText: _passwordFocusNode.hasFocus ? null : '••••••••',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),
                           prefixIcon: const Icon(Icons.lock, color: Color(0xFF444748)),
                           filled: true,
@@ -161,16 +176,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity,
-                    height: 52, // matching padding roughly
+                    height: 52,
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black, // bg-primary
-                        foregroundColor: Colors.white, // text-on-primary
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        elevation: 10, // approximate shadow
+                        elevation: 10,
                       ),
                       child: _isLoading 
                         ? const CircularProgressIndicator(color: Colors.white)
@@ -191,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  const Divider(color: Color(0x7FE4E2E2)), // border-t border-surface-variant/50
+                  const Divider(color: Color(0x7FE4E2E2)),
                   const SizedBox(height: 16),
                   
                   // Footer
@@ -234,6 +249,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
+    _emailFocusNode.removeListener(_onFocusChange);
+    _passwordFocusNode.removeListener(_onFocusChange);
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();

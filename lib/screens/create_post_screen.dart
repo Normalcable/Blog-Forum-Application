@@ -17,7 +17,6 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  String _selectedCommunity = 'general';
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   final _tagsController = TextEditingController();
@@ -65,7 +64,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       await postProvider.addPost(
         title: title,
         content: content,
-        community: _selectedCommunity,
+        community: 'general',
         tags: tags,
         imageFiles: _selectedImageFiles,
         authorName: user.displayName,
@@ -129,6 +128,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ),
                   ),
                 ),
+
+                // Main Discussion Card (Title, Tags, Content)
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -147,43 +148,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        decoration: const BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Color(0xFFE9E8E7))),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.group_outlined, color: Color(0xFF747878)),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _selectedCommunity,
-                                  isDense: true,
-                                  icon: const Icon(Icons.arrow_drop_down, color: Color(0xFF444748)),
-                                  style: GoogleFonts.hankenGrotesk(
-                                    fontSize: 14,
-                                    color: const Color(0xFF444748),
-                                  ),
-                                  onChanged: (String? newValue) {
-                                    if (newValue != null) {
-                                      setState(() => _selectedCommunity = newValue);
-                                    }
-                                  },
-                                  items: const [
-                                    DropdownMenuItem(value: 'general', child: Text('Select Community...')),
-                                    DropdownMenuItem(value: 'design', child: Text('Design Systems')),
-                                    DropdownMenuItem(value: 'tech', child: Text('Tech & Architecture')),
-                                    DropdownMenuItem(value: 'philosophy', child: Text('Philosophy')),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+                      // Title Input
                       TextField(
                         controller: _titleController,
                         style: GoogleFonts.libreCaslonText(
@@ -200,7 +165,38 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           contentPadding: EdgeInsets.zero,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
+
+                      // Top Tags Field
+                      Row(
+                        children: [
+                          const Icon(Icons.numbers, size: 18, color: Color(0xFF775A19)),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: TextField(
+                              controller: _tagsController,
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 14,
+                                color: const Color(0xFF775A19),
+                                fontWeight: FontWeight.w500,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Add tags (comma separated, e.g. Design, Flutter)',
+                                hintStyle: GoogleFonts.hankenGrotesk(
+                                  fontSize: 14,
+                                  color: const Color(0xFFC4C7C7),
+                                ),
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 24, color: Color(0xFFF5F3F3)),
+
+                      // Body Content Input
                       TextField(
                         controller: _contentController,
                         maxLines: 10,
@@ -223,6 +219,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
+
                 // Media / Attachments Card
                 Container(
                   padding: const EdgeInsets.all(24),
@@ -337,58 +334,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Formatting Toolbar & Tags
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE4E2E2)),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x0C000000),
-                        offset: Offset(0, 4),
-                        blurRadius: 6,
-                        spreadRadius: -1,
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.format_bold, color: Color(0xFF444748)),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.format_italic, color: Color(0xFF444748)),
-                          const SizedBox(width: 16),
-                          const Icon(Icons.link, color: Color(0xFF444748)),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.tag, size: 18, color: Color(0xFF747878)),
-                          const SizedBox(width: 8),
-                          SizedBox(
-                            width: 120,
-                            child: TextField(
-                              controller: _tagsController,
-                              style: GoogleFonts.hankenGrotesk(fontSize: 12),
-                              decoration: InputDecoration(
-                                hintText: 'Tag1, Tag2...',
-                                hintStyle: GoogleFonts.hankenGrotesk(fontSize: 12, color: const Color(0xFFC4C7C7)),
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 80),
+                const SizedBox(height: 40),
               ],
             ),
           ),
