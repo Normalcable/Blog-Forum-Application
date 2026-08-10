@@ -5,13 +5,22 @@ import '../models/post_model.dart';
 import '../models/comment_model.dart';
 import '../models/user_model.dart';
 
+/// Low-level Data Access Service handling all direct communication with Supabase backend:
+/// Auth (SignUp, SignIn, SignOut), Storage Bucket Uploads, PostgreSQL Queries & RLS Joins.
 class SupabaseService {
   SupabaseClient get _client => Supabase.instance.client;
 
+  /// Gets the currently authenticated Supabase Auth user session (if any).
   User? get currentUser => _client.auth.currentUser;
+
+  /// Returns true if a user session is currently active.
   bool get isAuthenticated => currentUser != null;
 
-  // AUTH API
+  // ========================================================
+  // AUTHENTICATION API
+  // ========================================================
+
+  /// Registers a new user with Email & Password and creates a matching profile in `profiles` table.
   Future<AuthResponse> signUp({
     required String email,
     required String password,
@@ -27,6 +36,7 @@ class SupabaseService {
     );
   }
 
+  /// Signs in an existing user using Email and Password.
   Future<AuthResponse> signIn({
     required String email,
     required String password,
@@ -37,11 +47,17 @@ class SupabaseService {
     );
   }
 
+  /// Terminates the current user session.
   Future<void> signOut() async {
     await _client.auth.signOut();
   }
 
-  // STORAGE API
+  // ========================================================
+  // STORAGE BUCKET API
+  // ========================================================
+
+  /// Uploads multiple image files (`XFile`) to specified Supabase Storage bucket ('posts' or 'avatars')
+  /// and returns their public CDN URLs.
   Future<List<String>> uploadImages(List<XFile> files, String bucket) async {
     final List<String> urls = [];
     final userId = currentUser?.id ?? 'guest';
@@ -69,6 +85,7 @@ class SupabaseService {
     return urls;
   }
 
+  /// Uploads a single user avatar photo to the 'avatars' storage bucket.
   Future<String?> uploadAvatar(XFile file) async {
     try {
       final urls = await uploadImages([file], 'avatars');
@@ -79,7 +96,11 @@ class SupabaseService {
     }
   }
 
-  // USER PROFILE API
+  // ========================================================
+  // USER PROFILES API
+  // ========================================================
+
+  /// Fetches a public user profile from `profiles` table by user ID.
   Future<UserModel?> getProfile(String userId) async {
     try {
       final res = await _client
@@ -102,6 +123,7 @@ class SupabaseService {
     }
   }
 
+  /// Updates profile metadata (`display_name`, `username`, `bio`, `avatar_url`) in `profiles` table.
   Future<void> updateProfile({
     required String userId,
     required String displayName,
@@ -109,7 +131,7 @@ class SupabaseService {
     required String bio,
     String? avatarUrl,
   }) async {
-    final updates = {
+    final updates = <String, dynamic>{
       'display_name': displayName,
       'username': username,
       'bio': bio,
@@ -122,7 +144,11 @@ class SupabaseService {
     await _client.from('profiles').update(updates).eq('id', userId);
   }
 
-  // POSTS API WITH PAGINATION
+  // ========================================================
+  // POSTS API WITH PAGINATION & LIKES
+  // ========================================================
+
+  /// Fetches paginated posts from Supabase database with author profiles and likes.
   Future<List<PostModel>> fetchPosts({int offset = 0, int limit = 10}) async {
     try {
       final res = await _client
@@ -160,6 +186,7 @@ class SupabaseService {
     }
   }
 
+  /// Searches posts across `title`, `content`, and `community` using PostgreSQL `ilike` wildcard query.
   Future<List<PostModel>> searchPosts(String query) async {
     if (query.trim().isEmpty) return [];
     final cleanQuery = query.trim();
@@ -201,45 +228,51 @@ class SupabaseService {
     }
   }
 
+  /// Creates a new post entry in `posts` table.
   Future<PostModel?> createPost({
     required String title,
     required String content,
     required String community,
     required List<String> tags,
-    List<String> imageUrls = const [],
+    required List<String> imageUrls,
   }) async {
     if (currentUser == null) return null;
 
-    final res = await _client.from('posts').insert({
-      'author_id': currentUser!.id,
-      'title': title,
-      'content': content,
-      'community': community,
-      'tags': tags,
-      'image_urls': imageUrls,
-    }).select('''
-      *,
-      profiles!posts_author_id_fkey (display_name, username, avatar_url)
-    ''').single();
+    try {
+      final res = await _client.from('posts').insert({
+        'author_id': currentUser!.id,
+        'title': title,
+        'content': content,
+        'community': community,
+        'tags': tags,
+        'image_urls': imageUrls,
+      }).select('''
+        *,
+        profiles!posts_author_id_fkey (display_name, username, avatar_url)
+      ''').single();
 
-    final profile = res['profiles'] ?? {};
+      final profile = res['profiles'] ?? {};
 
-    return PostModel(
-      id: res['id'],
-      authorId: res['author_id'],
-      authorName: profile['display_name'] ?? 'Discourse User',
-      authorHandle: '@${profile['username'] ?? 'user'}',
-      authorAvatarUrl: profile['avatar_url'],
-      title: res['title'],
-      content: res['content'],
-      community: res['community'] ?? 'general',
-      tags: List<String>.from(res['tags'] ?? []),
-      imageUrls: List<String>.from(res['image_urls'] ?? []),
-      createdAt: DateTime.parse(res['created_at']),
-      likedUserIds: {},
-    );
+      return PostModel(
+        id: res['id'],
+        authorId: res['author_id'],
+        authorName: profile['display_name'] ?? 'Discourse User',
+        authorHandle: '@${profile['username'] ?? 'user'}',
+        authorAvatarUrl: profile['avatar_url'],
+        title: res['title'],
+        content: res['content'],
+        community: res['community'],
+        tags: List<String>.from(res['tags'] ?? []),
+        imageUrls: List<String>.from(res['image_urls'] ?? []),
+        createdAt: DateTime.parse(res['created_at']),
+      );
+    } catch (e) {
+      debugPrint('Supabase createPost error: $e');
+      return null;
+    }
   }
 
+  /// Updates post content, title, community, tags, and images in `posts` table.
   Future<void> updatePost({
     required String postId,
     required String title,
@@ -261,10 +294,12 @@ class SupabaseService {
     await _client.from('posts').update(updates).eq('id', postId);
   }
 
+  /// Deletes a post from `posts` table.
   Future<void> deletePost(String postId) async {
     await _client.from('posts').delete().eq('id', postId);
   }
 
+  /// Inserts or deletes a like entry in `post_likes` table for active user.
   Future<void> toggleLikePost(String postId, bool currentlyLiked) async {
     if (currentUser == null) return;
     if (currentlyLiked) {
@@ -281,7 +316,11 @@ class SupabaseService {
     }
   }
 
+  // ========================================================
   // COMMENTS API
+  // ========================================================
+
+  /// Fetches comments for a specific post with author profile information.
   Future<List<CommentModel>> fetchComments(String postId) async {
     try {
       final res = await _client.from('comments').select('''
@@ -309,6 +348,7 @@ class SupabaseService {
     }
   }
 
+  /// Creates a new comment or nested threaded reply in `comments` table.
   Future<CommentModel?> createComment({
     required String postId,
     required String content,
@@ -358,6 +398,7 @@ class SupabaseService {
     }
   }
 
+  /// Deletes a comment entry from `comments` table.
   Future<void> deleteComment(String commentId) async {
     await _client.from('comments').delete().eq('id', commentId);
   }

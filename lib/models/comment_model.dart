@@ -1,14 +1,21 @@
+/// Data model representing a Comment or Nested Threaded Reply under a Post.
+/// Supports parent linking (`parentId` & `parentAuthorName`) for recursive comment trees.
 class CommentModel {
   final String id;
   final String postId;
   final String authorId;
   final String authorName;
   final String? authorAvatarUrl;
+
+  /// Null for root comments; points to parent comment ID for nested replies.
   final String? parentId;
   final String? parentAuthorName;
+
   final String content;
   final List<String> imageUrls;
   final DateTime createdAt;
+
+  /// Set of user IDs who have liked this comment (prevents cross-account like bleed).
   final Set<String> likedUserIds;
 
   CommentModel({
@@ -25,13 +32,16 @@ class CommentModel {
     Set<String>? likedUserIds,
   }) : likedUserIds = likedUserIds ?? {};
 
+  /// Total number of unique likes received by this comment.
   int get likesCount => likedUserIds.length;
 
+  /// Checks whether a specific logged-in user has liked this comment.
   bool isLikedForUser(String? userId) {
     if (userId == null || userId.isEmpty) return false;
     return likedUserIds.contains(userId);
   }
 
+  /// Creates a copy of [CommentModel] with updated fields for immutable state transitions.
   CommentModel copyWith({
     String? authorName,
     String? authorAvatarUrl,

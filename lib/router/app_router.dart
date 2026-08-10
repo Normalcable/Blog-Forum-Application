@@ -11,9 +11,11 @@ import '../screens/edit_post_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/search_screen.dart';
 import '../screens/activity_screen.dart';
-
 import '../screens/user_profile_screen.dart';
 
+/// Central Routing & Navigation Configuration powered by [GoRouter].
+/// Integrates with [AuthProvider] via `refreshListenable` to dynamically evaluate access control rules
+/// whenever user login/logout state changes.
 class AppRouter {
   static GoRouter createRouter(AuthProvider authProvider) {
     return GoRouter(
@@ -25,6 +27,9 @@ class AppRouter {
         final isGoingToLogin = state.matchedLocation == '/login';
         final isGoingToRegister = state.matchedLocation == '/register';
         
+        // Unauthenticated Guest Access Rule:
+        // Guests may view Feed (/), Post Details (/post/:id), Search (/search), Activity (/activity), and User Profiles (/user/:id).
+        // Protected routes (Create Post, Edit Post, Edit Profile) redirect unauthenticated users to /login.
         if (!isLoggedIn && !isGoingToLogin && !isGoingToRegister) {
           final isGoingToFeed = state.matchedLocation == '/';
           final isGoingToSearch = state.matchedLocation == '/search';
@@ -39,6 +44,7 @@ class AppRouter {
           }
         }
         
+        // Logged-in users attempting to open Login or Register are automatically redirected to Feed (/)
         if (isLoggedIn && (isGoingToLogin || isGoingToRegister)) {
           return '/';
         }

@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../models/post_model.dart';
 
+/// Shared Discussion Card Component used across FeedScreen, SearchScreen, and UserProfileScreen.
+/// Displays post title, tags, content snippet, multi-image adaptive grid (1, 2, 3, 4+ layout), author header, and comment/like actions.
 class PostCard extends StatelessWidget {
   final PostModel post;
   final String currentUserId;

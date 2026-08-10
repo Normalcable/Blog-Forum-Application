@@ -5,6 +5,8 @@ import '../config/supabase_config.dart';
 import '../models/post_model.dart';
 import '../services/supabase_service.dart';
 
+/// State Management Provider for Forum Discussions & Blog Posts.
+/// Handles paginated feed loading, post creation, editing, deletion, search filtering, and like toggling.
 class PostProvider extends ChangeNotifier {
   final SupabaseService _supabaseService = SupabaseService();
   bool _isLoading = false;

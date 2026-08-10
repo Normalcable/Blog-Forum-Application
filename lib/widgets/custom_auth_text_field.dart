@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Reusable Authentication Text Field Widget.
+/// Listens to [FocusNode] focus events so the placeholder text clears immediately upon selection.
 class CustomAuthTextField extends StatefulWidget {
   final TextEditingController controller;
   final String placeholder;
@@ -26,6 +28,7 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
   @override
   void initState() {
     super.initState();
+    // Re-render field on focus node state change to clear placeholder text instantly
     _focusNode.addListener(_onFocusChange);
   }
 
@@ -50,6 +53,7 @@ class _CustomAuthTextFieldState extends State<CustomAuthTextField> {
       obscureText: widget.obscureText,
       keyboardType: widget.keyboardType,
       decoration: InputDecoration(
+        // Clears placeholder text immediately when the text field receives focus
         hintText: _focusNode.hasFocus ? null : widget.placeholder,
         hintStyle: const TextStyle(color: Color(0xFF444748)),
         prefixIcon: Icon(widget.prefixIcon, color: const Color(0xFF444748)),

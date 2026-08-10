@@ -1,7 +1,10 @@
 import '../models/comment_model.dart';
 import '../models/post_model.dart';
 
+/// Provides initial offline fallback sample data for discussions and comments.
+/// Used exclusively when Supabase backend credentials are not configured or when testing offline.
 class MockData {
+  /// Initial collection of sample forum discussions and blog posts.
   static List<PostModel> get initialPosts => [
         PostModel(
           id: '1',
@@ -45,6 +48,7 @@ class MockData {
         ),
       ];
 
+  /// Initial collection of sample discussion comments keyed by post ID.
   static Map<String, List<CommentModel>> get initialComments => {
         '1': [
           CommentModel(

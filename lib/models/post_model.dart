@@ -1,3 +1,5 @@
+/// Data model representing a Discussion or Blog Post.
+/// Uses [Set<String>] for `likedUserIds` to ensure per-account like tracking isolation.
 class PostModel {
   final String id;
   final String authorId;
@@ -10,6 +12,8 @@ class PostModel {
   final List<String> tags;
   final List<String> imageUrls;
   final DateTime createdAt;
+
+  /// Set of user IDs who have liked this post (prevents cross-account like bleed).
   final Set<String> likedUserIds;
 
   PostModel({
@@ -27,13 +31,16 @@ class PostModel {
     Set<String>? likedUserIds,
   }) : likedUserIds = likedUserIds ?? {};
 
+  /// Total number of unique likes received by this post.
   int get likesCount => likedUserIds.length;
 
+  /// Checks whether a specific logged-in user has liked this post.
   bool isLikedForUser(String? userId) {
     if (userId == null || userId.isEmpty) return false;
     return likedUserIds.contains(userId);
   }
 
+  /// Creates a copy of [PostModel] with updated fields for immutable state transitions.
   PostModel copyWith({
     String? title,
     String? content,

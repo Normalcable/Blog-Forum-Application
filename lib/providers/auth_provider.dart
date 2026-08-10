@@ -5,6 +5,8 @@ import '../config/supabase_config.dart';
 import '../models/user_model.dart';
 import '../services/supabase_service.dart';
 
+/// State Management Provider for Authentication & User Profiles.
+/// Handles login, registration, session persistence, profile updates, and human-readable auth error parsing.
 class AuthProvider extends ChangeNotifier {
   final SupabaseService _supabaseService = SupabaseService();
   bool _isLoggedIn = false;
@@ -27,6 +29,7 @@ class AuthProvider extends ChangeNotifier {
     _initAuth();
   }
 
+  /// Restores existing Supabase user session on application startup if logged in.
   void _initAuth() {
     if (SupabaseConfig.isConfigured && _supabaseService.isAuthenticated) {
       _isLoggedIn = true;
@@ -34,6 +37,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Fetches profile metadata from `profiles` table for active user ID.
   Future<void> _loadProfile(String userId) async {
     final profile = await _supabaseService.getProfile(userId);
     if (profile != null) {
@@ -42,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Signs in user with Email & Password against Supabase Auth.
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
@@ -69,6 +74,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Registers a new user account with Name, Email & Password in Supabase Auth.
   Future<bool> register(String name, String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
@@ -100,6 +106,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Converts raw Supabase / Exception error objects into friendly user-facing messages.
   String _parseAuthError(dynamic e) {
     if (e is AuthException) {
       final msg = e.message.toLowerCase();
@@ -124,6 +131,7 @@ class AuthProvider extends ChangeNotifier {
     return 'An unexpected error occurred. Please try again.';
   }
 
+  /// Updates profile information (`displayName`, `username`, `bio`, and avatar photo upload).
   Future<void> updateProfile({
     required String displayName,
     required String username,
@@ -163,6 +171,7 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Logs out active user session.
   Future<void> logout() async {
     if (SupabaseConfig.isConfigured) {
       await _supabaseService.signOut();

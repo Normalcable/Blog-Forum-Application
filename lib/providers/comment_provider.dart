@@ -5,6 +5,8 @@ import '../config/supabase_config.dart';
 import '../models/comment_model.dart';
 import '../services/supabase_service.dart';
 
+/// State Management Provider for Post Comments & Threaded Replies.
+/// Manages fetching, adding multi-image comments, replying to comments, and comment deletion.
 class CommentProvider extends ChangeNotifier {
   final SupabaseService _supabaseService = SupabaseService();
 

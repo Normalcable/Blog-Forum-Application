@@ -9,9 +9,13 @@ import 'providers/post_provider.dart';
 import 'providers/comment_provider.dart';
 import 'router/app_router.dart';
 
+/// Entry point of the Discourse Blog & Forum application.
+/// Initializes Supabase backend services, sets up multi-provider state management,
+/// and configures GoRouter navigation with a responsive mobile-first shell layout.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Supabase backend services if credentials are configured
   if (SupabaseConfig.isConfigured) {
     await Supabase.initialize(
       url: SupabaseConfig.supabaseUrl,
@@ -19,6 +23,7 @@ Future<void> main() async {
     );
   }
 
+  // Launch application wrapped in Root MultiProvider
   runApp(
     MultiProvider(
       providers: [
@@ -31,6 +36,7 @@ Future<void> main() async {
   );
 }
 
+/// Root Application Widget configuring GoRouter navigation and responsive web frame.
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -44,6 +50,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // Initialize GoRouter with access to AuthProvider for reactive auth guards
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     _router = AppRouter.createRouter(authProvider);
   }
@@ -52,14 +59,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Discourse',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
       routerConfig: _router,
+      // Wrap application in a centered 480px frame for web & desktop testing
       builder: (context, child) {
         return Container(
-          color: const Color(0xFF1A1A1A), // Dark backdrop for desktop web debugging
+          color: const Color(0xFF1A1A1A), // Dark ambient backdrop for web preview
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
