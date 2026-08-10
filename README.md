@@ -1,54 +1,54 @@
-# 💬 Discourse — Modern Blog & Forum Application
+#  Discourse — Modern Blog & Forum Application
 
 A sleek, high-performance, cross-platform Blog & Forum mobile application built with **Flutter**, **Provider** state management, **GoRouter**, and **Supabase Backend Services**.
 
 ---
 
-## ✨ Features
+##  Features
 
-- **🔐 User Authentication**:
+- ** User Authentication**:
   - Sign Up & Sign In with strict Email Format Regex validation (`name@example.com`).
   - Human-readable error messages for invalid credentials, existing emails, or connectivity issues.
   - Interactive `FocusNode` text fields that clear placeholder hints immediately upon click/focus.
   - Seamless instant logout redirection powered by `GoRouter`'s `refreshListenable`.
 
-- **📰 Feed & Facebook-Style Post Creation Bar**:
+- ** Feed & Facebook-Style Post Creation Bar**:
   - Top post creation bar ("*Start a discussion, [FirstName]...*") that scrolls naturally with the feed so floating buttons never block content while doom-scrolling.
   - Adaptive multi-photo grid layout supporting single, dual 50%/50% split, and multi-image attachments.
   - Create, Edit, and Delete post actions restricted to post authors.
   - Clean inline tag creation (`#Design`, `#Flutter`) positioned right under discussion titles.
 
-- **👤 Dynamic User Profiles & Avatars**:
+- ** Dynamic User Profiles & Avatars**:
   - Customizable display name, handle (`@username`), short bio, and profile photo avatar.
   - Profile image picker with Supabase Cloud Storage integration and local fallback mode.
   - Real-time avatar synchronization across post cards, comment threads, and top app bars.
 
-- **💬 Recursive Threaded Comments & Replies**:
+- ** Recursive Threaded Comments & Replies**:
   - Deeply nested recursive comment tree rendering (`parentId` and `parentAuthorName`).
   - Interactive "Replying to @user" banner with auto-focus input.
 
-- **❤️ Per-Account Like Isolation**:
+- ** Per-Account Like Isolation**:
   - Liking system (`likedUserIds` Set) strictly scoped per active user account.
   - Highlights heart icons (`♥`) exclusively for the logged-in user while accurately reflecting global like counts.
 
-- **🔍 Multi-Field Search Engine**:
+- ** Multi-Field Search Engine**:
   - Dedicated `/search` view with instant real-time filtering across titles, body text, and tags.
   - Hybrid local memory and Supabase cloud database SQL `ilike` query.
 
-- **📜 Personal Activity History Log**:
+- ** Personal Activity History Log**:
   - Categorized `/activity` dashboard tracking:
     - **YOUR POSTS**: Discussions published by your account.
     - **YOUR COMMENTS & REPLIES**: Comments and replies composed by your account with quote previews.
     - **LIKED POSTS**: Discussions liked by your account.
 
-- **🎨 Design System**:
+- ** Design System**:
   - Styled with custom typography using Google Fonts (`Libre Caslon Text` & `Hanken Grotesk`).
   - Custom 3-Tab Bottom Navigation Bar with warm gold active pill indicators (`#FED488`).
   - Padded top search header without clunky notification icons.
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Frontend Framework**: Flutter (Dart)
 - **State Management**: Provider (`ChangeNotifier`)
@@ -58,7 +58,7 @@ A sleek, high-performance, cross-platform Blog & Forum mobile application built 
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.x or higher)
