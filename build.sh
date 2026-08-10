@@ -1,13 +1,17 @@
 #!/bin/bash
-# Clone Flutter SDK on Vercel build container if not present
-if [ ! -d "flutter" ]; then
-  echo "Cloning Flutter SDK..."
-  git clone https://github.com/flutter/flutter.git -b stable --depth 1
+set -e
+
+# Download lightweight pre-compiled Flutter SDK if not present
+if [ ! -d "$HOME/flutter" ]; then
+  echo "Downloading Flutter SDK..."
+  git clone https://github.com/flutter/flutter.git -b stable --depth 1 $HOME/flutter
 fi
 
-export PATH="$PATH:`pwd`/flutter/bin"
+export PATH="$PATH:$HOME/flutter/bin"
+
+echo "Checking Flutter installation..."
+flutter --version
 
 echo "Building Flutter Web application..."
-flutter config --enable-web
 flutter pub get
-flutter build web --release
+flutter build web --release --no-pub
