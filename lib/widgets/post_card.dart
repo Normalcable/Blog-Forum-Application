@@ -98,39 +98,48 @@ class PostCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Builder(
-                      builder: (context) {
-                        ImageProvider? authorAvatar;
-                        if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
-                          final url = post.authorAvatarUrl!;
-                          if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
-                            authorAvatar = NetworkImage(url);
-                          } else {
-                            authorAvatar = FileImage(File(url)) as ImageProvider;
+                GestureDetector(
+                  onTap: () {
+                    if (post.authorId == currentUserId) {
+                      context.push('/profile');
+                    } else {
+                      context.push('/user/${post.authorId}');
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Builder(
+                        builder: (context) {
+                          ImageProvider? authorAvatar;
+                          if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
+                            final url = post.authorAvatarUrl!;
+                            if (url.startsWith('http://') || url.startsWith('https://') || kIsWeb) {
+                              authorAvatar = NetworkImage(url);
+                            } else {
+                              authorAvatar = FileImage(File(url)) as ImageProvider;
+                            }
                           }
-                        }
-                        return CircleAvatar(
-                          radius: 12,
-                          backgroundColor: const Color(0xFFE9E8E7),
-                          backgroundImage: authorAvatar,
-                          child: authorAvatar == null
-                              ? const Icon(Icons.person, size: 16, color: Color(0xFF444748))
-                              : null,
-                        );
-                      },
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      post.authorName,
-                      style: GoogleFonts.hankenGrotesk(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                          return CircleAvatar(
+                            radius: 12,
+                            backgroundColor: const Color(0xFFE9E8E7),
+                            backgroundImage: authorAvatar,
+                            child: authorAvatar == null
+                                ? const Icon(Icons.person, size: 16, color: Color(0xFF444748))
+                                : null,
+                          );
+                        },
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Text(
+                        post.authorName,
+                        style: GoogleFonts.hankenGrotesk(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Row(
                   children: [

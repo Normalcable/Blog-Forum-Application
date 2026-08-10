@@ -12,6 +12,8 @@ import '../screens/profile_screen.dart';
 import '../screens/search_screen.dart';
 import '../screens/activity_screen.dart';
 
+import '../screens/user_profile_screen.dart';
+
 class AppRouter {
   static GoRouter createRouter(AuthProvider authProvider) {
     return GoRouter(
@@ -27,11 +29,12 @@ class AppRouter {
           final isGoingToFeed = state.matchedLocation == '/';
           final isGoingToSearch = state.matchedLocation == '/search';
           final isGoingToActivity = state.matchedLocation == '/activity';
+          final isGoingToUser = state.matchedLocation.startsWith('/user/');
           final isGoingToPostDetail = state.matchedLocation.startsWith('/post/') &&
               !state.matchedLocation.contains('/edit') &&
               !state.matchedLocation.contains('/create');
           
-          if (!isGoingToFeed && !isGoingToPostDetail && !isGoingToSearch && !isGoingToActivity) {
+          if (!isGoingToFeed && !isGoingToPostDetail && !isGoingToSearch && !isGoingToActivity && !isGoingToUser) {
             return '/login';
           }
         }
@@ -84,6 +87,13 @@ class AppRouter {
         GoRoute(
           path: '/profile',
           builder: (context, state) => const ProfileScreen(),
+        ),
+        GoRoute(
+          path: '/user/:id',
+          builder: (context, state) {
+            final id = state.pathParameters['id'] ?? '';
+            return UserProfileScreen(userId: id);
+          },
         ),
       ],
     );

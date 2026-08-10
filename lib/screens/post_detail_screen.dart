@@ -148,51 +148,60 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Builder(
-                                builder: (context) {
-                                  ImageProvider? authorAvatar;
-                                  if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
-                                    final url = post.authorAvatarUrl!;
-                                    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
-                                      authorAvatar = NetworkImage(url);
-                                    } else {
-                                      authorAvatar = FileImage(File(url)) as ImageProvider;
+                          GestureDetector(
+                            onTap: () {
+                              if (post.authorId == currentUser.id) {
+                                context.push('/profile');
+                              } else {
+                                context.push('/user/${post.authorId}');
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Builder(
+                                  builder: (context) {
+                                    ImageProvider? authorAvatar;
+                                    if (post.authorAvatarUrl != null && post.authorAvatarUrl!.isNotEmpty) {
+                                      final url = post.authorAvatarUrl!;
+                                      if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:') || url.startsWith('data:') || kIsWeb) {
+                                        authorAvatar = NetworkImage(url);
+                                      } else {
+                                        authorAvatar = FileImage(File(url)) as ImageProvider;
+                                      }
                                     }
-                                  }
-                                  return CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: const Color(0xFFE9E8E7),
-                                    backgroundImage: authorAvatar,
-                                    child: authorAvatar == null
-                                        ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
-                                        : null,
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    post.authorName,
-                                    style: GoogleFonts.hankenGrotesk(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
+                                    return CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: const Color(0xFFE9E8E7),
+                                      backgroundImage: authorAvatar,
+                                      child: authorAvatar == null
+                                          ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
+                                          : null,
+                                    );
+                                  },
+                                ),
+                                const SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      post.authorName,
+                                      style: GoogleFonts.hankenGrotesk(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    post.authorHandle,
-                                    style: GoogleFonts.hankenGrotesk(
-                                      fontSize: 12,
-                                      color: const Color(0xFF444748),
+                                    Text(
+                                      post.authorHandle,
+                                      style: GoogleFonts.hankenGrotesk(
+                                        fontSize: 12,
+                                        color: const Color(0xFF444748),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           if (isAuthor)
                             Row(
@@ -527,25 +536,30 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Builder(
-          builder: (context) {
-            ImageProvider? commentAvatar;
-            if (avatarUrl != null && avatarUrl.isNotEmpty) {
-              if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('blob:') || avatarUrl.startsWith('data:') || kIsWeb) {
-                commentAvatar = NetworkImage(avatarUrl);
-              } else {
-                commentAvatar = FileImage(File(avatarUrl)) as ImageProvider;
-              }
-            }
-            return CircleAvatar(
-              radius: 20,
-              backgroundColor: const Color(0xFFE9E8E7),
-              backgroundImage: commentAvatar,
-              child: commentAvatar == null
-                  ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
-                  : null,
-            );
+        GestureDetector(
+          onTap: () {
+            context.push('/user/${comment.authorId}');
           },
+          child: Builder(
+            builder: (context) {
+              ImageProvider? commentAvatar;
+              if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('blob:') || avatarUrl.startsWith('data:') || kIsWeb) {
+                  commentAvatar = NetworkImage(avatarUrl);
+                } else {
+                  commentAvatar = FileImage(File(avatarUrl)) as ImageProvider;
+                }
+              }
+              return CircleAvatar(
+                radius: 20,
+                backgroundColor: const Color(0xFFE9E8E7),
+                backgroundImage: commentAvatar,
+                child: commentAvatar == null
+                    ? const Icon(Icons.person, size: 24, color: Color(0xFF444748))
+                    : null,
+              );
+            },
+          ),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -573,12 +587,17 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       child: Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Text(
-                            author,
-                            style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                          GestureDetector(
+                            onTap: () {
+                              context.push('/user/${comment.authorId}');
+                            },
+                            child: Text(
+                              author,
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                           if (parentAuthorName != null && parentAuthorName.isNotEmpty) ...[
