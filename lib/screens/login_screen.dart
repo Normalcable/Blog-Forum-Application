@@ -108,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           hintText: 'name@example.com',
                           hintStyle: const TextStyle(color: Color(0xFF444748)),

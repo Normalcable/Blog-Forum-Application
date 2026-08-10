@@ -25,15 +25,6 @@ class _SearchScreenState extends State<SearchScreen> {
   List<PostModel> _remoteResults = [];
   bool _isSearchingRemote = false;
 
-  final List<String> _popularTags = [
-    'Design',
-    'Flutter',
-    'Minimalism',
-    'UX',
-    'Architecture',
-    'Tech',
-  ];
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -63,11 +54,6 @@ class _SearchScreenState extends State<SearchScreen> {
         _isSearchingRemote = false;
       });
     }
-  }
-
-  void _selectTag(String tag) {
-    _searchController.text = tag;
-    _onSearchChanged(tag);
   }
 
   @override
@@ -147,57 +133,6 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Popular Tag Chips
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'POPULAR TOPICS',
-                  style: GoogleFonts.hankenGrotesk(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.1,
-                    color: const Color(0xFF775A19),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _popularTags.map((tag) {
-                      final isSelected = _query.toLowerCase() == tag.toLowerCase();
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: FilterChip(
-                          label: Text('#$tag'),
-                          selected: isSelected,
-                          onSelected: (_) => _selectTag(tag),
-                          backgroundColor: const Color(0xFFF5F3F3),
-                          selectedColor: const Color(0xFF775A19),
-                          labelStyle: GoogleFonts.hankenGrotesk(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected ? Colors.white : const Color(0xFF1B1C1C),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide.none,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(height: 1, color: Color(0x4DE4E2E2)),
-
           // Results Header / Loading Status
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
@@ -259,7 +194,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 1),
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: -1),
     );
   }
 
