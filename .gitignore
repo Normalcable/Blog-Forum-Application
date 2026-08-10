@@ -17,3 +17,5 @@ build/
 # OS / Misc
 .DS_Store
 Thumbs.db
+frontend_ui_template/
+

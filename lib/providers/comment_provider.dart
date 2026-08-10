@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../config/mock_data.dart';
 import '../config/supabase_config.dart';
 import '../models/comment_model.dart';
 import '../services/supabase_service.dart';
@@ -7,28 +8,8 @@ import '../services/supabase_service.dart';
 class CommentProvider extends ChangeNotifier {
   final SupabaseService _supabaseService = SupabaseService();
 
-  final Map<String, List<CommentModel>> _commentsByPostId = SupabaseConfig.isConfigured
-      ? {}
-      : {
-          '1': [
-            CommentModel(
-              id: 'c1',
-              postId: '1',
-              authorId: 'user_4',
-              authorName: 'David Chen',
-              content: "Brilliant take on the library analogy. I think the challenge is convincing stakeholders that 'quiet' interfaces don't mean 'dead' interfaces. Engagement metrics often punish subtlety.",
-              createdAt: DateTime.now().subtract(const Duration(hours: 1)),
-            ),
-            CommentModel(
-              id: 'c2',
-              postId: '1',
-              authorId: 'user_3',
-              authorName: 'Elena Rostova',
-              content: "Exactly this! We need better metrics for 'quality of time spent' rather than just 'duration'.",
-              createdAt: DateTime.now().subtract(const Duration(minutes: 45)),
-            ),
-          ],
-        };
+  final Map<String, List<CommentModel>> _commentsByPostId =
+      SupabaseConfig.isConfigured ? {} : Map.from(MockData.initialComments);
 
   List<CommentModel> getCommentsForPost(String postId) {
     if (SupabaseConfig.isConfigured && !_commentsByPostId.containsKey(postId)) {

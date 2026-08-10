@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../providers/auth_provider.dart';
+import '../widgets/custom_auth_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,22 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _nameFocusNode = FocusNode();
-  final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameFocusNode.addListener(_onFocusChange);
-    _emailFocusNode.addListener(_onFocusChange);
-    _passwordFocusNode.addListener(_onFocusChange);
-  }
-
-  void _onFocusChange() {
-    setState(() {});
-  }
 
   void _register() async {
     final name = _nameController.text.trim();
@@ -132,8 +119,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-                  
-                  // Form
+
+                  // Full Name Input
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -146,24 +133,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomAuthTextField(
                         controller: _nameController,
-                        focusNode: _nameFocusNode,
-                        decoration: InputDecoration(
-                          hintText: _nameFocusNode.hasFocus ? null : 'Sarah Jenkins',
-                          hintStyle: const TextStyle(color: Color(0xFF444748)),
-                          prefixIcon: const Icon(Icons.person, color: Color(0xFF444748)),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F3F3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
+                        placeholder: 'Sarah Jenkins',
+                        prefixIcon: Icons.person,
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  // Email Input
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -176,25 +155,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomAuthTextField(
                         controller: _emailController,
-                        focusNode: _emailFocusNode,
+                        placeholder: 'you@example.com',
+                        prefixIcon: Icons.mail,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: _emailFocusNode.hasFocus ? null : 'you@example.com',
-                          hintStyle: const TextStyle(color: Color(0xFF444748)),
-                          prefixIcon: const Icon(Icons.mail, color: Color(0xFF444748)),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F3F3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  // Password Input
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -207,25 +178,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomAuthTextField(
                         controller: _passwordController,
-                        focusNode: _passwordFocusNode,
+                        placeholder: '••••••••',
+                        prefixIcon: Icons.lock,
                         obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: _passwordFocusNode.hasFocus ? null : '••••••••',
-                          hintStyle: const TextStyle(color: Color(0xFF444748)),
-                          prefixIcon: const Icon(Icons.lock, color: Color(0xFF444748)),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F3F3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
+
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -239,21 +201,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         elevation: 10,
                       ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Text(
-                            'Register',
-                            style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'Register',
+                              style: GoogleFonts.hankenGrotesk(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
                     ),
                   ),
                   const SizedBox(height: 32),
                   const Divider(color: Color(0x7FE4E2E2)),
                   const SizedBox(height: 16),
-                  
+
                   // Footer
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -294,12 +256,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    _nameFocusNode.removeListener(_onFocusChange);
-    _emailFocusNode.removeListener(_onFocusChange);
-    _passwordFocusNode.removeListener(_onFocusChange);
-    _nameFocusNode.dispose();
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();

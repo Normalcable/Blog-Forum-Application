@@ -10,6 +10,7 @@ import '../providers/comment_provider.dart';
 import '../providers/post_provider.dart';
 import '../services/supabase_service.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import '../widgets/post_card.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -181,8 +182,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           final commentCount = commentProvider.getCommentCountForPost(post.id);
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 24.0),
-                            child: _buildSearchPostCard(
-                              context: context,
+                            child: PostCard(
                               post: post,
                               currentUserId: currentUserId,
                               commentCount: commentCount,
@@ -211,8 +211,8 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F3F3),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F3F3),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 48, color: const Color(0xFF775A19)),
@@ -235,126 +235,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 color: const Color(0xFF444748),
                 height: 1.5,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchPostCard({
-    required BuildContext context,
-    required PostModel post,
-    required String currentUserId,
-    required int commentCount,
-    required VoidCallback onLikeToggle,
-  }) {
-    final isLiked = post.isLikedForUser(currentUserId);
-
-    return GestureDetector(
-      onTap: () => context.push('/post/${post.id}'),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE4E2E2)),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0C000000),
-              offset: Offset(0, 2),
-              blurRadius: 4,
-            )
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F3F3),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    '#${post.community}',
-                    style: GoogleFonts.hankenGrotesk(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF775A19),
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  post.authorName,
-                  style: GoogleFonts.hankenGrotesk(
-                    fontSize: 13,
-                    color: const Color(0xFF444748),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              post.title,
-              style: GoogleFonts.libreCaslonText(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              post.content,
-              style: GoogleFonts.hankenGrotesk(
-                fontSize: 14,
-                color: const Color(0xFF444748),
-                height: 1.4,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: onLikeToggle,
-                  child: Row(
-                    children: [
-                      Icon(
-                        isLiked ? Icons.favorite : Icons.favorite_border,
-                        size: 16,
-                        color: isLiked ? const Color(0xFFBA1A1A) : const Color(0xFF444748),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${post.likesCount}',
-                        style: GoogleFonts.hankenGrotesk(
-                          fontSize: 12,
-                          color: const Color(0xFF444748),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Row(
-                  children: [
-                    const Icon(Icons.chat_bubble_outline, size: 16, color: Color(0xFF444748)),
-                    const SizedBox(width: 4),
-                    Text(
-                      '$commentCount',
-                      style: GoogleFonts.hankenGrotesk(
-                        fontSize: 12,
-                        color: const Color(0xFF444748),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ],
         ),

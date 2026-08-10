@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../providers/auth_provider.dart';
+import '../widgets/custom_auth_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,20 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _emailFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailFocusNode.addListener(_onFocusChange);
-    _passwordFocusNode.addListener(_onFocusChange);
-  }
-
-  void _onFocusChange() {
-    setState(() {});
-  }
 
   void _login() async {
     final email = _emailController.text.trim();
@@ -105,8 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
-                  // Form
+
+                  // Email Input
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -119,61 +108,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomAuthTextField(
                         controller: _emailController,
-                        focusNode: _emailFocusNode,
+                        placeholder: 'name@example.com',
+                        prefixIcon: Icons.mail,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: _emailFocusNode.hasFocus ? null : 'name@example.com',
-                          hintStyle: const TextStyle(color: Color(0xFF444748)),
-                          prefixIcon: const Icon(Icons.mail, color: Color(0xFF444748)),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F3F3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  // Password Input
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Password',
-                            style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xFF1B1C1C),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Password',
+                        style: GoogleFonts.hankenGrotesk(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF1B1C1C),
+                        ),
                       ),
                       const SizedBox(height: 8),
-                      TextField(
+                      CustomAuthTextField(
                         controller: _passwordController,
-                        focusNode: _passwordFocusNode,
+                        placeholder: '••••••••',
+                        prefixIcon: Icons.lock,
                         obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: _passwordFocusNode.hasFocus ? null : '••••••••',
-                          hintStyle: const TextStyle(color: Color(0xFF444748)),
-                          prefixIcon: const Icon(Icons.lock, color: Color(0xFF444748)),
-                          filled: true,
-                          fillColor: const Color(0xFFF5F3F3),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
+
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -187,28 +154,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         elevation: 10,
                       ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Log In',
-                                style: GoogleFonts.hankenGrotesk(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Log In',
+                                  style: GoogleFonts.hankenGrotesk(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              const Icon(Icons.arrow_forward, size: 20),
-                            ],
-                          ),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.arrow_forward, size: 20),
+                              ],
+                            ),
                     ),
                   ),
                   const SizedBox(height: 32),
                   const Divider(color: Color(0x7FE4E2E2)),
                   const SizedBox(height: 16),
-                  
+
                   // Footer
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -249,10 +216,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _emailFocusNode.removeListener(_onFocusChange);
-    _passwordFocusNode.removeListener(_onFocusChange);
-    _emailFocusNode.dispose();
-    _passwordFocusNode.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
