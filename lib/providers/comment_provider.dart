@@ -124,6 +124,21 @@ class CommentProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateComment(String commentId, String newContent) async {
+    for (var list in _commentsByPostId.values) {
+      final index = list.indexWhere((c) => c.id == commentId);
+      if (index != -1) {
+        list[index] = list[index].copyWith(content: newContent);
+        notifyListeners();
+        break;
+      }
+    }
+
+    if (SupabaseConfig.isConfigured) {
+      await _supabaseService.updateComment(commentId, newContent);
+    }
+  }
+
   Future<void> deleteComment(String postId, String commentId) async {
     if (_commentsByPostId.containsKey(postId)) {
       _commentsByPostId[postId]!.removeWhere((c) => c.id == commentId);

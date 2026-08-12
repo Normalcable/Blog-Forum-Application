@@ -398,6 +398,11 @@ class SupabaseService {
     }
   }
 
+  /// Updates a comment's content in `comments` table.
+  Future<void> updateComment(String commentId, String content) async {
+    await _client.from('comments').update({'content': content}).eq('id', commentId);
+  }
+
   /// Deletes a comment entry from `comments` table.
   Future<void> deleteComment(String commentId) async {
     await _client.from('comments').delete().eq('id', commentId);

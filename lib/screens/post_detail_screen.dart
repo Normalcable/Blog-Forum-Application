@@ -55,6 +55,151 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     });
   }
 
+  void _confirmDeletePost(BuildContext context, String postId) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Delete Discussion',
+          style: GoogleFonts.hankenGrotesk(fontWeight: FontWeight.w700, fontSize: 18),
+        ),
+        content: Text(
+          'Are you sure you want to delete this discussion post? This action cannot be undone.',
+          style: GoogleFonts.hankenGrotesk(fontSize: 15),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.hankenGrotesk(color: const Color(0xFF444748), fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              final postProvider = Provider.of<PostProvider>(context, listen: false);
+              await postProvider.deletePost(postId);
+              if (context.mounted) {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/');
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFBA1A1A),
+              elevation: 0,
+            ),
+            child: Text(
+              'Delete',
+              style: GoogleFonts.hankenGrotesk(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeleteComment(BuildContext context, String postId, String commentId) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Delete Comment',
+          style: GoogleFonts.hankenGrotesk(fontWeight: FontWeight.w700, fontSize: 18),
+        ),
+        content: Text(
+          'Are you sure you want to delete this comment?',
+          style: GoogleFonts.hankenGrotesk(fontSize: 15),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.hankenGrotesk(color: const Color(0xFF444748), fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              final commentProvider = Provider.of<CommentProvider>(context, listen: false);
+              await commentProvider.deleteComment(postId, commentId);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFBA1A1A),
+              elevation: 0,
+            ),
+            child: Text(
+              'Delete',
+              style: GoogleFonts.hankenGrotesk(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditCommentDialog(BuildContext context, CommentModel comment) {
+    final controller = TextEditingController(text: comment.content);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Edit Comment',
+          style: GoogleFonts.hankenGrotesk(fontWeight: FontWeight.w700, fontSize: 18),
+        ),
+        content: TextField(
+          controller: controller,
+          maxLines: 4,
+          minLines: 2,
+          style: GoogleFonts.hankenGrotesk(fontSize: 15),
+          decoration: InputDecoration(
+            hintText: 'Edit your comment...',
+            hintStyle: GoogleFonts.hankenGrotesk(color: const Color(0xFF444748)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFE4E2E2)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.black),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.hankenGrotesk(color: const Color(0xFF444748), fontWeight: FontWeight.w600),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final newText = controller.text.trim();
+              if (newText.isNotEmpty) {
+                Navigator.of(ctx).pop();
+                final commentProvider = Provider.of<CommentProvider>(context, listen: false);
+                await commentProvider.updateComment(comment.id, newText);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              elevation: 0,
+            ),
+            child: Text(
+              'Save',
+              style: GoogleFonts.hankenGrotesk(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -63,28 +208,16 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
     final post = postProvider.getPostById(widget.postId);
     final currentUser = authProvider.currentUser;
+    final isAuthor = post != null && post.authorId == currentUser.id;
 
     if (post == null) {
       return Scaffold(
         appBar: AppBar(title: const Text('Post Not Found')),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Post not found or has been deleted.'),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('Return to Home'),
-              ),
-            ],
-          ),
-        ),
+        body: const Center(child: Text('This post no longer exists.')),
       );
     }
 
     final comments = commentProvider.getCommentsForPost(post.id);
-    final isAuthor = post.authorId == currentUser.id;
 
     return Scaffold(
       backgroundColor: const Color(0xFFFBF9F8),
@@ -94,7 +227,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         scrolledUnderElevation: 4,
         shadowColor: const Color(0x0C000000),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF444748)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B1C1C)),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -212,10 +345,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete, color: Color(0xFFBA1A1A)),
-                                  onPressed: () {
-                                    postProvider.deletePost(post.id);
-                                    context.pop();
-                                  },
+                                  onPressed: () => _confirmDeletePost(context, post.id),
                                 ),
                               ],
                             ),
@@ -530,6 +660,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     required bool isLiked,
     required bool isOwner,
     required VoidCallback onLikeToggle,
+    required VoidCallback onEdit,
     required VoidCallback onDelete,
     required VoidCallback onReply,
   }) {
@@ -625,9 +756,19 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       ),
                     ),
                     if (isOwner)
-                      GestureDetector(
-                        onTap: onDelete,
-                        child: const Icon(Icons.delete_outline, size: 18, color: Color(0xFFBA1A1A)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: onEdit,
+                            child: const Icon(Icons.edit_outlined, size: 18, color: Color(0xFF444748)),
+                          ),
+                          const SizedBox(width: 12),
+                          GestureDetector(
+                            onTap: onDelete,
+                            child: const Icon(Icons.delete_outline, size: 18, color: Color(0xFFBA1A1A)),
+                          ),
+                        ],
                       ),
                   ],
                 ),
@@ -651,14 +792,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       child: url.startsWith('http://') || url.startsWith('https://') || kIsWeb
                           ? Image.network(
                               url,
-                              width: 100,
-                              height: 100,
+                              width: 80,
+                              height: 80,
                               fit: BoxFit.cover,
                             )
                           : Image.file(
                               File(url),
-                              width: 100,
-                              height: 100,
+                              width: 80,
+                              height: 80,
                               fit: BoxFit.cover,
                             ),
                     )).toList(),
@@ -673,14 +814,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         children: [
                           Icon(
                             isLiked ? Icons.favorite : Icons.favorite_border,
-                            size: 18,
+                            size: 16,
                             color: isLiked ? const Color(0xFFBA1A1A) : const Color(0xFF444748),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             likes,
                             style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: const Color(0xFF444748),
                             ),
                           ),
@@ -692,12 +833,12 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                       onTap: onReply,
                       child: Row(
                         children: [
-                          const Icon(Icons.reply, size: 18, color: Color(0xFF444748)),
+                          const Icon(Icons.reply, size: 16, color: Color(0xFF444748)),
                           const SizedBox(width: 4),
                           Text(
                             'Reply',
                             style: GoogleFonts.hankenGrotesk(
-                              fontSize: 14,
+                              fontSize: 13,
                               fontWeight: FontWeight.w500,
                               color: const Color(0xFF444748),
                             ),
@@ -754,7 +895,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             isLiked: isLiked,
             isOwner: isOwner,
             onLikeToggle: () => commentProvider.toggleLikeComment(comment.id, currentUserId),
-            onDelete: () => commentProvider.deleteComment(postId, comment.id),
+            onEdit: () => _showEditCommentDialog(context, comment),
+            onDelete: () => _confirmDeleteComment(context, postId, comment.id),
             onReply: () => _onReplyToComment(comment),
           ),
         ),
